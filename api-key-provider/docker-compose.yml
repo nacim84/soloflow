@@ -8,7 +8,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: api_key_provider_db
+      POSTGRES_DB: soloflow_db
     ports:
       - "5434:5432"
     volumes:
@@ -21,31 +21,10 @@ services:
     networks:
       - api-key-provider-network
 
-  pgadmin:
-    image: dpage/pgadmin4:latest
-    container_name: api-key-provider-pgadmin
-    restart: unless-stopped
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: admin
-      PGADMIN_CONFIG_SERVER_MODE: "False"
-      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
-    ports:
-      - "6432:80"
-    volumes:
-      - pgadmin_data:/var/lib/pgadmin
-    networks:
-      - api-key-provider-network
-    depends_on:
-      postgres:
-        condition: service_healthy
-
 networks:
   api-key-provider-network:
     driver: bridge
 
 volumes:
   postgres_data:
-    driver: local
-  pgadmin_data:
     driver: local

@@ -1,0 +1,86 @@
+services:
+  database:
+    image: postgres:16-alpine
+    container_name: soloflow-db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: soloflow_db
+    ports:
+      - "5434:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - soloflow-network
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    ports:
+      - "6432:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_LISTEN_PORT: 80
+    volumes:
+      - pgadmin_data:/root/.pgadmin
+    depends_on:
+      - database
+    networks:
+      - soloflow-network
+
+  gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    container_name: soloflow-gateway
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/soloflow_db
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      # Pepper must be passed at runtime or via env_file
+      - API_KEY_PEPPER=${API_KEY_PEPPER}
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - soloflow-network
+
+  provider:
+    build:
+      context: ./api-key-provider
+      dockerfile: Dockerfile
+    container_name: soloflow-provider
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@database:5432/soloflow_db
+      - API_KEY_PEPPER=${API_KEY_PEPPER}
+      - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
+      - BETTER_AUTH_URL=http://localhost:3000
+      # Mock values for build - replace in prod
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY:-sk_test_mock}
+      - RESEND_API_KEY=${RESEND_API_KEY:-re_mock}
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - soloflow-network
+
+networks:
+  soloflow-network:
+    driver: bridge
+
+volumes:
+  db_data:
+  pgadmin_data:

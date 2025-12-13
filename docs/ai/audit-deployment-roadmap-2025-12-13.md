@@ -101,7 +101,7 @@ src/main/java/com/rnblock/gateway/
 
 #### Configuration
 - `application.yaml` : Routes configurées, Database URL correcte
-- Database : `jdbc:postgresql://localhost:5434/api_key_provider_db` ✅
+- Database : `jdbc:postgresql://localhost:5434/soloflow_db` ✅
 - Port : 8080 (conforme CLAUDE.md) ✅
 - Dependencies : Toutes présentes et compatibles ✅
 
@@ -506,8 +506,8 @@ crypto.createHash('sha256')
 
 #### Database Connection
 
-- **Gateway** : `jdbc:postgresql://localhost:5434/api_key_provider_db`
-- **Provider** : `postgresql://postgres:postgres@localhost:5434/api_key_provider_db`
+- **Gateway** : `jdbc:postgresql://localhost:5434/soloflow_db`
+- **Provider** : `postgresql://postgres:postgres@localhost:5434/soloflow_db`
 
 **Résultat** : Même base, même port (5434) ✅
 
@@ -955,7 +955,7 @@ cd api-key-provider && npm run build
 # Expected : "✓ Compiled successfully"
 
 # Test Database
-psql -h localhost -p 5434 -U postgres api_key_provider_db \
+psql -h localhost -p 5434 -U postgres soloflow_db \
   -c "SELECT COUNT(*) FROM services;"
 # Expected : 3
 
@@ -1316,7 +1316,7 @@ npm run dev
 
 # Database
 docker-compose up -d
-psql -h localhost -p 5434 -U postgres api_key_provider_db
+psql -h localhost -p 5434 -U postgres soloflow_db
 ```
 
 #### Build & Test
@@ -1358,7 +1358,7 @@ curl http://localhost:3000/api/health
 
 ```env
 API_KEY_PEPPER=<32 bytes base64>
-SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5434/api_key_provider_db
+SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5434/soloflow_db
 SPRING_DATASOURCE_USERNAME=postgres
 SPRING_DATASOURCE_PASSWORD=<secret>
 ```
@@ -1366,7 +1366,7 @@ SPRING_DATASOURCE_PASSWORD=<secret>
 #### Provider (.env.local)
 
 ```env
-DATABASE_URL=postgresql://postgres:<password>@localhost:5434/api_key_provider_db
+DATABASE_URL=postgresql://postgres:<password>@localhost:5434/soloflow_db
 API_KEY_PEPPER=<MÊME que Gateway>
 BETTER_AUTH_SECRET=<32 bytes base64>
 BETTER_AUTH_URL=http://localhost:3000

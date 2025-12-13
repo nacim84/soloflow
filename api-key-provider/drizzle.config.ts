@@ -7,7 +7,7 @@ export default defineConfig({
   dbCredentials: {
     url:
       process.env.DATABASE_URL ||
-      "postgresql://postgres:postgres@localhost:5434/api_key_provider_db",
+      "postgresql://postgres:postgres@localhost:5434/soloflow_db",
   },
   verbose: true,
   strict: true,
