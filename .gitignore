@@ -1,0 +1,29 @@
+# System files
+NUL
+Thumbs.db
+Desktop.ini
+
+# Environment
+.env
+.env.local
+.env.*
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.iml
+
+# Node
+node_modules/
+dist/
+build/
+.next/
+
+# Java
+target/
+*.class
+
+# AI
+.claude/
+.gemini/

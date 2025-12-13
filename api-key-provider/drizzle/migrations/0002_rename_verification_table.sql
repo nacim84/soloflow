@@ -1,0 +1,1 @@
+-- ============================================n-- ============================================n-- Rename table from verifications to verificationnn-- (In this case, there are no foreign keys to the verification table)
