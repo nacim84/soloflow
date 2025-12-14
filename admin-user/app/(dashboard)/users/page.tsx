@@ -1,31 +1,43 @@
-// admin-user/src/app/users/page.tsx
+// admin-user/src/app/(dashboard)/users/page.tsx
 "use client";
 
 import { UserTable } from '@/components/users/UserTable';
 import { UserFormModal } from '@/components/users/UserFormModal';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button"
-import { Plus } from "lucide-react"
+import { Plus, Loader2 } from "lucide-react"
+import { getUsers } from '@/app/actions/user-actions';
 
+// Adapter le type User
 interface User {
   id: string;
   name: string;
   email: string;
-  role: string;
-  status: string;
+  emailVerified: boolean;
+  createdAt: Date;
+  image?: string | null;
+  // Champs optionnels pour compatibilité avec le Modal existant (à refactorer plus tard)
+  role?: string; 
+  status?: string;
 }
 
-const initialUsers: User[] = [
-  { id: '1', name: 'Alice Smith', email: 'alice@example.com', role: 'ADMIN', status: 'Active' },
-  { id: '2', name: 'Bob Johnson', email: 'bob@example.com', role: 'USER', status: 'Active' },
-  { id: '3', name: 'Charlie Brown', email: 'charlie@example.com', role: 'USER', status: 'Inactive' },
-  { id: '4', name: 'Diana Prince', email: 'diana@example.com', role: 'EDITOR', status: 'Active' },
-];
-
 export default function UsersPage() {
-  const [users, setUsers] = useState<User[]>(initialUsers);
+  const [users, setUsers] = useState<User[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState<User | undefined>(undefined);
+
+  useEffect(() => {
+    async function loadUsers() {
+      setIsLoading(true);
+      const res = await getUsers();
+      if (res.success && res.data) {
+        setUsers(res.data);
+      }
+      setIsLoading(false);
+    }
+    loadUsers();
+  }, []);
 
   const handleAddUser = () => {
     setCurrentUser(undefined);
@@ -38,16 +50,18 @@ export default function UsersPage() {
   };
 
   const handleDeleteUser = (userId: string) => {
-    if (confirm('Are you sure you want to delete this user?')) {
+    if (confirm('Are you sure you want to delete this user? (Mock action)')) {
       setUsers(users.filter((user) => user.id !== userId));
     }
   };
 
-  const handleSaveUser = (user: User) => {
+  const handleSaveUser = (user: any) => {
+    // Mock save logic for now - needs backend action
     if (currentUser) {
-      setUsers(users.map((u) => (u.id === user.id ? user : u)));
+      setUsers(users.map((u) => (u.id === user.id ? { ...u, ...user } : u)));
     } else {
-      setUsers([...users, user]);
+      const newUser = { ...user, id: Date.now().toString(), createdAt: new Date(), emailVerified: false };
+      setUsers([newUser, ...users]);
     }
     setIsModalOpen(false);
   };
@@ -65,13 +79,19 @@ export default function UsersPage() {
         </Button>
       </div>
       
-      <UserTable users={users} onEdit={handleEditUser} onDelete={handleDeleteUser} />
+      {isLoading ? (
+        <div className="flex justify-center p-8">
+          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+        </div>
+      ) : (
+        <UserTable users={users} onEdit={handleEditUser} onDelete={handleDeleteUser} />
+      )}
       
       <UserFormModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSave={handleSaveUser}
-        currentUser={currentUser}
+        currentUser={currentUser as any} // Cast temporaire
       />
     </div>
   );

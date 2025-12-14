@@ -19,13 +19,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { format } from "date-fns";
 
+// Type aligné avec le schéma Drizzle (approximativement pour l'affichage)
 interface User {
   id: string;
   name: string;
   email: string;
-  role: string;
-  status: string;
+  emailVerified: boolean;
+  createdAt: Date;
+  image?: string | null;
 }
 
 interface UserTableProps {
@@ -42,8 +45,8 @@ export const UserTable = ({ users, onEdit, onDelete }: UserTableProps) => {
           <TableRow>
             <TableHead>Name</TableHead>
             <TableHead>Email</TableHead>
-            <TableHead>Role</TableHead>
-            <TableHead>Status</TableHead>
+            <TableHead>Verified</TableHead>
+            <TableHead>Joined</TableHead>
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -54,21 +57,14 @@ export const UserTable = ({ users, onEdit, onDelete }: UserTableProps) => {
               <TableCell>{user.email}</TableCell>
               <TableCell>
                 <Badge 
-                  variant={
-                    user.role === 'ADMIN' ? 'destructive' : 
-                    user.role === 'EDITOR' ? 'default' : 'secondary'
-                  }
+                  variant={user.emailVerified ? 'success' : 'secondary'}
+                  className={user.emailVerified ? 'bg-green-100 text-green-800 hover:bg-green-200 border-transparent dark:bg-green-900/30 dark:text-green-400' : ''}
                 >
-                  {user.role}
+                  {user.emailVerified ? 'Yes' : 'No'}
                 </Badge>
               </TableCell>
               <TableCell>
-                 <Badge 
-                  variant={user.status === 'Active' ? 'success' : 'outline'}
-                  className={user.status === 'Active' ? 'bg-green-100 text-green-800 hover:bg-green-200 border-transparent' : ''}
-                >
-                  {user.status}
-                </Badge>
+                 {format(new Date(user.createdAt), "PPP")}
               </TableCell>
               <TableCell className="text-right">
                 <DropdownMenu>
