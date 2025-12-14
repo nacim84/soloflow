@@ -1,4 +1,4 @@
-# Audit Complet & Roadmap de Déploiement - SoloKonta
+# Audit Complet & Roadmap de Déploiement - SoloFlow
 
 **Date** : 2025-12-13
 **Auditeurs** : Explorator Agent + SaaS Architect Validator Agent
