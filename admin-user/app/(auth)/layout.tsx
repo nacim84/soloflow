@@ -1,12 +1,13 @@
-// admin-user/src/app/(auth)/layout.tsx
 export default function AuthLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      {children}
+    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10 bg-muted/20">
+      <div className="w-full max-w-sm">
+        {children}
+      </div>
     </div>
   );
 }
