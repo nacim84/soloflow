@@ -36,7 +36,7 @@ interface UserTableProps {
 
 export const UserTable = ({ users, onEdit, onDelete }: UserTableProps) => {
   return (
-    <div className="rounded-md border bg-white">
+    <div className="rounded-md border bg-card">
       <Table>
         <TableHeader>
           <TableRow>

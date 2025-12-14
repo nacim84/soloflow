@@ -20,6 +20,15 @@ SoloFlow is an **API monetization ecosystem** with atomic credit-based billing. 
 # Navigate to gateway directory
 cd api-gateway
 
+# Development workflow (PostgreSQL via Docker + hot reload)
+make docker-dev-up          # Start PostgreSQL (port 5434)
+make dev                    # Run Gateway with Spring DevTools hot reload
+make docker-dev-logs        # View PostgreSQL logs
+make docker-dev-down        # Stop PostgreSQL
+
+# Alternative: Using docker-compose directly
+docker-compose -f docker-compose.dev.yml up -d
+
 # Build the project
 ./mvnw clean install
 
@@ -34,6 +43,9 @@ cd api-gateway
 
 # Run only tests
 ./mvnw test
+
+# Clean target directory
+make clean                  # or ./mvnw clean
 ```
 
 ### API Key Provider (Next.js)
@@ -76,11 +88,20 @@ npm run migrate:keys   # Migrate from AES-256 to SHA-256 hashing
 ### Database (PostgreSQL via Docker)
 
 ```bash
-# Development: PostgreSQL only (for Provider dev with hot reload)
+# Development: PostgreSQL only (for local dev with hot reload)
+# Both Gateway and Provider have identical dev setups
+
+# For Gateway development:
+cd api-gateway
+make docker-dev-up           # Start PostgreSQL (port 5434)
+make docker-dev-down         # Stop PostgreSQL
+# or: docker-compose -f docker-compose.dev.yml up -d
+
+# For Provider development:
 cd api-key-provider
-docker-compose -f docker-compose.dev.yml up -d     # Start PostgreSQL
-docker-compose -f docker-compose.dev.yml down      # Stop PostgreSQL
-docker-compose -f docker-compose.dev.yml logs -f   # View logs
+npm run docker:dev:up        # Start PostgreSQL (port 5434)
+npm run docker:dev:down      # Stop PostgreSQL
+# or: docker-compose -f docker-compose.dev.yml up -d
 
 # Production: Full stack (PostgreSQL + Gateway + Provider)
 # From project root
