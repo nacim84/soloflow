@@ -7,7 +7,7 @@ claudeserver:
 
 spring:
   application:
-    name: gateway-api-n8n
+    name: api-gateway
 
   # Configuration Custom
   api:
