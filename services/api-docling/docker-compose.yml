@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  api:
+    image: rnci/api-docling:latest
+    container_name: api-docling
+    ports:
+      - "8083:8083"
+    deploy:
+      mode: replicated
+      replicas: 1

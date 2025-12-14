@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remboursement Indemnités Kilométriques</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+          background-color: #f0f2f5;
+        }
+
+        @media print {
+          .no-print {
+            display: none;
+          }
+        }
+
+        .main-table-bordered th,
+        .main-table-bordered td {
+          border: 0.5px solid #f79646;
+        }
+    </style>
+</head>
+
+<body class="font-sans">
+<div class="max-w-full mx-auto bg-white">
+    <!-- SECTION TITRE -->
+    <div class="text-center mb-6">
+        <h1 class="inline-block bg-[#0f2c4a] border border-[#f79646] text-white font-bold text-sm py-3 px-12 tracking-widest">
+            REMBOURSEMENT INDEMNITES KILOMETRIQUES
+        </h1>
+    </div>
+
+    <!-- SECTION INFORMATIONS GENERALES -->
+    <div class="flex justify-between items-start mb-4 gap-1 text-xs">
+        <!-- Infos de gauche : Nom, Année, etc. -->
+        <div class="w-1/2 space-y-2">
+            <div class="flex items-center">
+                <span class="w-40 font-semibold">Nom Prénom</span>
+                <span class="bg-[#0f2c4a] text-white py-1 px-4 border border-[#f79646] flex-grow text-center"
+                      th:text="${employee.fullName}">RABIA Nacim</span>
+            </div>
+            <div class="flex items-center">
+                <span class="w-40 font-semibold">Année</span>
+                <span class="bg-[#0f2c4a] text-white py-1 px-4 border border-[#f79646] flex-grow text-center"
+                      th:text="${year}">2025</span>
+            </div>
+            <div class="flex items-center">
+                <span class="w-40 font-semibold">Mois</span>
+                <span class="bg-[#0f2c4a] text-white py-1 px-4 border border-[#f79646] flex-grow text-center"
+                      th:text="${monthYear}">Août</span>
+            </div>
+            <div class="flex items-center">
+                <span class="w-40 font-semibold">Puissance</span>
+                <span class="bg-[#0f2c4a] text-white py-1 px-4 border border-[#f79646] flex-grow text-center"
+                      th:text="${vehicle.displayText}">5 CV</span>
+            </div>
+        </div>
+
+        <!-- Infos de droite : Barème kilométrique -->
+        <div class="w-1/2 flex justify-end">
+            <table class="border-collapse border border-[#f79646] text-center">
+                <thead>
+                <tr>
+                    <th class="bg-[#0f2c4a] text-white p-1 font-semibold border border-[#f79646]">
+                        Distance (d) jusqu'à 5000 km
+                    </th>
+                    <th class="bg-[#0f2c4a] text-white p-1 font-semibold border border-[#f79646]">
+                        Distance (d) de 5001 à 20000 km
+                    </th>
+                    <th class="bg-[#0f2c4a] text-white p-1 font-semibold border border-[#f79646]">
+                        Distance (d) au-delà de 20001 km
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="p-1 border border-[#f79646]"
+                        th:text="|d × ${#numbers.formatDecimal(vehicle.rateUpTo5000km, 1, 3)}|">d x 0,636</td>
+                    <td class="p-1 border border-[#f79646]"
+                        th:text="|(d × ${#numbers.formatDecimal(vehicle.rateFrom5001To20000km, 1, 3)}) + 1 395|">(d x 0,357) +
+                        1 395</td>
+                    <td class="p-1 border border-[#f79646]"
+                        th:text="|d × ${#numbers.formatDecimal(vehicle.rateAbove20000km, 1, 3)}|">d x 0,427</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- SECTION KILOMETRAGE PRECEDENT -->
+    <div class="flex items-center mb-2 gap-3 text-xs">
+        <span class="w-auto font-semibold pr-4">Kilométrage parcouru depuis le début de l'année (début de mois)</span>
+        <span class="bg-[#0f2c4a] text-white py-1 px-4 border border-[#f79646] text-center"
+              th:text="${previousKilometers + ' km'}">3948,0 km</span>
+    </div>
+
+    <!-- TABLEAU PRINCIPAL DES TRAJETS -->
+    <table class="w-full border-collapse text-xs main-table-bordered">
+        <thead class="bg-[#0f2c4a] text-white text-center">
+        <tr>
+            <th class="p-1">DATE</th>
+            <th class="p-1">DESTINATION</th>
+            <th class="p-1">CLIENT</th>
+            <th class="p-1">NBRE DE KM</th>
+            <th class="p-1">TOTAL €</th>
+        </tr>
+        </thead>
+        <tbody class="text-center">
+        <tr th:each="entry : ${entries}"
+            th:class="${entry.holiday ? 'bg-gray-300' : 'bg-[#dbeffc]'}">
+            <td class="p-0 flex">
+              <span
+                      th:class="${entry.weekend ? 'bg-[#f79646]' : (entry.holiday ? 'bg-gray-500' : 'bg-[#0f2c4a]')} + ' text-white font-bold w-24 p-0'"
+                      th:text="${entry.dayOfWeek}">Jour</span>
+                <span class="flex-1 py-0" th:text="${#temporals.format(entry.date, 'dd/MM/yyyy')}">10/01/2025</span>
+            </td>
+            <td class="p-0 text-left" th:text="${entry.destination}"></td>
+            <td class="p-0" th:text="${entry.client}"></td>
+            <td class="p-0"
+                th:text="${entry.kilometers != null ? #numbers.formatDecimal(entry.kilometers, 1, 1) + ' km' : ''}">
+            </td>
+            <td class="p-0"
+                th:text="${entry.totalAmount != null ? #numbers.formatDecimal(entry.totalAmount, 1, 2) + ' €' : '0,00 €'}">
+            </td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="1" class="bg-[#0f2c4a] text-white font-bold text-center border border-[#f79646]">
+                TOTAL
+            </td>
+            <td colspan="2" class="bg-white">
+            </td>
+            <td class="p-1 text-center border border-[#f79646]"
+                th:text="${#numbers.formatDecimal(#aggregates.sum(entries.![kilometers]), 1, 1) + ' km'}">
+                0 km
+            </td>
+            <td class="p-1 text-center bg-[#0f2c4a] text-white font-bold"
+                th:text="${#numbers.formatDecimal(#aggregates.sum(entries.![totalAmount]), 1, 2) + ' €'}">
+                0,00 €
+            </td>
+        </tr>
+        </tfoot>
+    </table>
+
+    <!-- SECTION KILOMETRAGE FINAL -->
+    <div class="flex items-center mt-2 gap-1 text-xs">
+        <span class="w-auto font-semibold pr-4">Kilométrage parcouru depuis le début de l'année (fin de mois)</span>
+        <span class="bg-[#0f2c4a] text-white py-1 px-4 border border-[#f79646] text-center"
+              th:text="${finalKilometers + ' km'}">4 578,0 km</span>
+    </div>
+</div>
+</body>
+
+</html>
