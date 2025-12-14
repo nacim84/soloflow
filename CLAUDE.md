@@ -4,11 +4,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-SoloFlow is an **API monetization ecosystem** with atomic credit-based billing. It consists of three main components:
+SoloFlow is an **API monetization ecosystem** with atomic credit-based billing. It consists of four main components:
 
 1. **API Gateway** (`/api-gateway`) - Spring Boot enforcement layer for security and billing
 2. **API Key Provider** (`/api-key-provider`) - Next.js developer portal for key management and credit purchasing
-3. **Backend Services** (`/services`) - Microservices providing business value (e.g., PDF tools, AI, mileage)
+3. **Admin User** (`/admin-user`) - Next.js admin dashboard for user and organization management
+4. **Backend Services** (`/services`) - Microservices providing business value (e.g., PDF tools, AI, mileage)
 
 **Core Architecture Principle**: The Gateway and Provider share a single PostgreSQL database to ensure atomic consistency between credit balance and API usage. This eliminates sync latency and prevents race conditions.
 
@@ -85,6 +86,28 @@ npm run seed:services  # Seed the 3 real services (PDF, AI, Mileage)
 npm run migrate:keys   # Migrate from AES-256 to SHA-256 hashing
 ```
 
+### Admin User Dashboard (Next.js)
+
+```bash
+# Navigate to admin-user directory
+cd admin-user
+
+# Install dependencies
+npm install
+
+# Development server (port 3001)
+npm run dev
+
+# Build for production
+npm run build
+
+# Start production server
+npm start
+
+# Lint code
+npm run lint
+```
+
 ### Database (PostgreSQL via Docker)
 
 ```bash
@@ -103,7 +126,7 @@ npm run docker:dev:up        # Start PostgreSQL (port 5434)
 npm run docker:dev:down      # Stop PostgreSQL
 # or: docker-compose -f docker-compose.dev.yml up -d
 
-# Production: Full stack (PostgreSQL + Gateway + Provider)
+# Production: Full stack (PostgreSQL + Gateway + Provider + Admin User)
 # From project root
 docker-compose -f docker-compose.production.yml up -d
 ```
@@ -387,7 +410,9 @@ The system supports multi-organization (B2B) architecture:
 
 - API Gateway: `8080`
 - API Key Provider: `3000`
+- Admin User Dashboard: `3001`
 - PostgreSQL: `5434` (NOTE: Not the default 5432!)
+- pgAdmin: `6432` (mapped to port 80 in container)
 - Backend Services: `8081`, `8082`, `8083`, etc.
 
 ## Error Responses (API Gateway)
