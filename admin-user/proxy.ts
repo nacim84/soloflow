@@ -18,6 +18,8 @@ export function proxy(request: NextRequest) {
   return NextResponse.next();
 }
 
+export default proxy;
+
 export const config = {
   matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'], // Match all paths except API routes, static files, and favicon
 };
