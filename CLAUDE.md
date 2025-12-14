@@ -76,10 +76,15 @@ npm run migrate:keys   # Migrate from AES-256 to SHA-256 hashing
 ### Database (PostgreSQL via Docker)
 
 ```bash
-# From api-key-provider directory
-docker-compose up -d     # Start PostgreSQL
-docker-compose down      # Stop PostgreSQL
-docker-compose logs -f   # View logs
+# Development: PostgreSQL only (for Provider dev with hot reload)
+cd api-key-provider
+docker-compose -f docker-compose.dev.yml up -d     # Start PostgreSQL
+docker-compose -f docker-compose.dev.yml down      # Stop PostgreSQL
+docker-compose -f docker-compose.dev.yml logs -f   # View logs
+
+# Production: Full stack (PostgreSQL + Gateway + Provider)
+# From project root
+docker-compose -f docker-compose.production.yml up -d
 ```
 
 ### Backend Services
