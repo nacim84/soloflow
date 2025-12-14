@@ -200,7 +200,7 @@ lib/                              # Utilities, auth config
 ```yaml
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5434/api_key_provider_db
+    url: jdbc:postgresql://localhost:5434/soloflow_db
     username: postgres
     password: postgres
 
@@ -222,7 +222,7 @@ spring:
 
 ```env
 # Database (MUST match Gateway's database)
-DATABASE_URL=postgresql://postgres:postgres@localhost:5434/api_key_provider_db
+DATABASE_URL=postgresql://postgres:postgres@localhost:5434/soloflow_db
 
 # Security (MUST match Gateway's pepper)
 API_KEY_PEPPER=your-secret-pepper-here
@@ -415,7 +415,7 @@ The Gateway returns structured JSON error responses:
 ```bash
 # Check if key exists and is active
 # In api-key-provider database
-psql -h localhost -p 5434 -U postgres api_key_provider_db
+psql -h localhost -p 5434 -U postgres soloflow_db
 SELECT id, "keyHash", "orgId", "isActive" FROM api_keys WHERE "keyHash" = 'your_hash_here';
 
 # Check wallet balance
@@ -446,7 +446,7 @@ If you see: `Server configuration error: Pepper missing`
 #### 6. Database Connection Issues
 ```bash
 # Test PostgreSQL connectivity
-psql -h localhost -p 5434 -U postgres -d api_key_provider_db -c "SELECT 1;"
+psql -h localhost -p 5434 -U postgres -d soloflow_db -c "SELECT 1;"
 
 # Check if both apps can connect
 # Gateway: Check logs for Hibernate connection pool messages

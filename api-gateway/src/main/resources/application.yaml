@@ -15,7 +15,7 @@ spring:
       pepper: ${API_KEY_PEPPER}
 
   datasource:
-    url: jdbc:postgresql://localhost:5434/api_key_provider_db
+    url: jdbc:postgresql://localhost:5434/soloflow_db
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver
