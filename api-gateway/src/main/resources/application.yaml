@@ -9,16 +9,11 @@ spring:
   application:
     name: api-gateway
 
-  # Configuration Custom
-  api:
-    key:
-      pepper: ${API_KEY_PEPPER}
-
   datasource:
     # url: jdbc:postgresql://localhost:5434/soloflow_db
-    url: jdbc:postgresql://postgres.xylsbcbteqenehvggrss:cU9DKR*/jKEVyf3@aws-1-eu-north-1.pooler.supabase.com:6543/todos_db
-    username: postgres
-    password: postgres
+    url: jdbc:postgresql://aws-1-eu-north-1.pooler.supabase.com:6543/postgres
+    username: postgres.xylsbcbteqenehvggrss
+    password: cU9DKR*/jKEVyf3
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 20
@@ -76,3 +71,8 @@ management:
       show-details: always
     info:
       enabled: true
+
+# Configuration Custom
+api:
+  key:
+    pepper: dev-pepper-change-in-production
