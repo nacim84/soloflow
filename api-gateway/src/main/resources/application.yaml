@@ -39,18 +39,21 @@ spring:
     gateway:
       mvc:
         routes:
-          - id: service-1
+          # API Template Service (Timesheet & Mileage)
+          - id: api-template
             uri: http://localhost:8081
             predicates:
-              - Path=/api/v1/service-1/**
-          - id: service-2
+              - Path=/api/v1/template/**
+          # API PDF Service
+          - id: api-pdf
             uri: http://localhost:8082
             predicates:
-              - Path=/api/v1/service-2/**
-          - id: service-3
+              - Path=/api/v1/pdf/**
+          # API Docling Service
+          - id: api-docling
             uri: http://localhost:8083
             predicates:
-              - Path=/api/v1/service-3/**
+              - Path=/api/v1/docling/**
         default-filters:
           - name: RequestRateLimiter
             args:
