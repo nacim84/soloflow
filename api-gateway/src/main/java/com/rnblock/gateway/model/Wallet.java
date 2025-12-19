@@ -35,6 +35,24 @@ public class Wallet {
     @Column(name = "balance", nullable = false)
     private Integer balance = 0;
 
+    /**
+     * Total credits purchased (lifetime)
+     */
+    @Column(name = "totalPurchased", nullable = false)
+    private Integer totalPurchased = 0;
+
+    /**
+     * Total credits used (lifetime)
+     */
+    @Column(name = "totalUsed", nullable = false)
+    private Integer totalUsed = 0;
+
+    /**
+     * Currency code (e.g., EUR, USD)
+     */
+    @Column(name = "currency", nullable = false)
+    private String currency = "EUR";
+
     @Column(name = "createdAt", nullable = false, updatable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
