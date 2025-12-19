@@ -83,8 +83,8 @@ services:
       - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET:-whsec_mock}
       - STRIPE_PRICE_STARTUP_PACK=${STRIPE_PRICE_STARTUP_PACK:-price_mock}
       - RESEND_API_KEY=${RESEND_API_KEY:-re_mock}
-      - UPSTASH_REDIS_REST_URL=${UPSTASH_REDIS_REST_URL:-https://mock.upstash.io}
-      - UPSTASH_REDIS_REST_TOKEN=${UPSTASH_REDIS_REST_TOKEN:-mock}
+      - UPSTASH_REDIS_REST_URL=${UPSTASH_REDIS_REST_URL}
+      - UPSTASH_REDIS_REST_TOKEN=${UPSTASH_REDIS_REST_TOKEN}
     depends_on:
       database:
         condition: service_healthy
