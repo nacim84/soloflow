@@ -9,26 +9,10 @@ spring:
   application:
     name: api-gateway
 
-  datasource:
-    # url: jdbc:postgresql://localhost:5434/soloflow_db
-    url: jdbc:postgresql://aws-1-eu-north-1.pooler.supabase.com:6543/postgres
-    username: postgres.xylsbcbteqenehvggrss
-    password: cU9DKR*/jKEVyf3
-    driver-class-name: org.postgresql.Driver
-    hikari:
-      maximum-pool-size: 20
-      minimum-idle: 5
-      idle-timeout: 300000
-      connection-timeout: 20000
-
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: false
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        format_sql: true
+  # Database configuration moved to profile-specific files:
+  # - application-dev.yaml (local development)
+  # - application-prod.yaml (production with environment variables)
+  # Use: --spring.profiles.active=dev or --spring.profiles.active=prod
 
   cloud:
     gateway:
@@ -72,7 +56,6 @@ management:
     info:
       enabled: true
 
-# Configuration Custom
-api:
-  key:
-    pepper: dev-pepper-change-in-production
+# API Key Configuration
+# Pepper moved to profile-specific files (dev/prod)
+# See application-dev.yaml and application-prod.yaml
