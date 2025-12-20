@@ -9,10 +9,26 @@ spring:
   application:
     name: api-gateway
 
-  # Database configuration moved to profile-specific files:
-  # - application-dev.yaml (local development)
-  # - application-prod.yaml (production with environment variables)
-  # Use: --spring.profiles.active=dev or --spring.profiles.active=prod
+  # Database configuration (can be overridden by profile-specific files)
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5434/soloflow_db}
+    username: ${DATABASE_USERNAME:postgres}
+    password: ${DATABASE_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+      naming:
+        # CRITICAL: Keep column names as-is (camelCase) to match Drizzle schema
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        # Disable auto quoting of identifiers
+        globally_quoted_identifiers: true
 
   cloud:
     gateway:
@@ -20,17 +36,17 @@ spring:
         routes:
           # API Template Service (Timesheet & Mileage)
           - id: api-template
-            uri: http://localhost:8081
+            uri: ${SERVICE_TEMPLATE_URL:http://host.docker.internal:8081}
             predicates:
               - Path=/api/v1/template/**
           # API PDF Service
           - id: api-pdf
-            uri: http://localhost:8082
+            uri: ${SERVICE_PDF_URL:http://host.docker.internal:8082}
             predicates:
               - Path=/api/v1/pdf/**
           # API Docling Service
           - id: api-docling
-            uri: http://localhost:8083
+            uri: ${SERVICE_DOCLING_URL:http://host.docker.internal:8083}
             predicates:
               - Path=/api/v1/docling/**
         default-filters:
@@ -45,6 +61,12 @@ spring:
     caffeine:
       spec: maximumSize=1000,expireAfterWrite=1h
 
+  # Redis configuration for distributed rate limiting
+  data:
+    redis:
+      host: ${SPRING_DATA_REDIS_HOST:localhost}
+      port: ${SPRING_DATA_REDIS_PORT:6379}
+
 management:
   endpoints:
     web:
@@ -57,5 +79,6 @@ management:
       enabled: true
 
 # API Key Configuration
-# Pepper moved to profile-specific files (dev/prod)
-# See application-dev.yaml and application-prod.yaml
+api:
+  key:
+    pepper: ${API_KEY_PEPPER:dev-pepper-change-in-production}

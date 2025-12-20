@@ -8,8 +8,10 @@ import com.rnblock.gateway.model.Wallet;
 import com.rnblock.gateway.repository.ApiKeyRepository;
 import com.rnblock.gateway.repository.WalletRepository;
 import io.github.bucket4j.Bandwidth;
-import io.github.bucket4j.Bucket;
+import io.github.bucket4j.BucketConfiguration;
 import io.github.bucket4j.Refill;
+import io.github.bucket4j.distributed.BucketProxy;
+import io.github.bucket4j.redis.lettuce.cas.LettuceBasedProxyManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,8 +24,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
 
 /**
  * Service for API key validation, credit management (via Wallet), and rate limiting.
@@ -36,7 +37,7 @@ public class ApiKeyValidationService {
     private final ApiKeyRepository apiKeyRepository;
     private final WalletRepository walletRepository;
     private final CacheManager cacheManager;
-    private final Map<String, Bucket> rateLimitBuckets = new ConcurrentHashMap<>();
+    private final LettuceBasedProxyManager<String> rateLimitProxyManager;
 
     @Value("${api.key.pepper}")
     private String apiKeyPepper;
@@ -72,11 +73,15 @@ public class ApiKeyValidationService {
             throw new InvalidApiKeyException("API key is invalid or inactive");
         }
 
-        // Rate limiting with Bucket4j (using Key Hash as identifier)
-        Bucket bucket = rateLimitBuckets.computeIfAbsent(keyHash, k -> Bucket.builder()
+        // Distributed rate limiting with Bucket4j + Redis
+        String bucketKey = "rate-limit:" + keyHash;
+        Supplier<BucketConfiguration> configSupplier = () -> BucketConfiguration.builder()
                 .addLimit(Bandwidth.classic(DEFAULT_RATE_LIMIT,
-                    Refill.intervally(DEFAULT_RATE_LIMIT, Duration.ofSeconds(1))))
-                .build());
+                        Refill.intervally(DEFAULT_RATE_LIMIT, Duration.ofSeconds(1))))
+                .build();
+
+        BucketProxy bucket = rateLimitProxyManager.builder()
+                .build(bucketKey, configSupplier);
 
         if (!bucket.tryConsume(1)) {
             log.warn("Rate limit exceeded for key: {}", keyHash);
