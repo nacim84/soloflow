@@ -61,7 +61,7 @@ services:
     ports:
       - "8080:8080"
     env_file:
-      - .env.docker
+      - .env
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/soloflow_db
       - SPRING_DATASOURCE_USERNAME=postgres
@@ -92,7 +92,7 @@ services:
     ports:
       - "3000:3000"
     env_file:
-      - .env.docker
+      - .env
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@database:5432/soloflow_db
       - API_KEY_PEPPER=${API_KEY_PEPPER}
@@ -127,7 +127,7 @@ services:
     ports:
       - "3001:3001"
     env_file:
-      - .env.docker
+      - .env
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@database:5432/soloflow_db
       - NODE_ENV=production

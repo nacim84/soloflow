@@ -1,21 +1,22 @@
-# Utilisation de l'image OpenJDK 24
-FROM openjdk:24-slim
-
-# Information sur le mainteneur
-LABEL maintainer="rabia.nacim@yahoo.com"
-
-# Définition du répertoire de travail
+# Stage 1: Build
+FROM maven:3.9-eclipse-temurin-21-alpine AS build
 WORKDIR /app
+COPY pom.xml .
+RUN mvn dependency:go-offline
+COPY src ./src
+RUN mvn clean package -DskipTests
 
-# Copie du JAR de l'application
-COPY target/*.jar api.jar
+# Stage 2: Runtime
+FROM eclipse-temurin:21-jre-alpine
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
 
-# Variables d'environnement par défaut
-ENV SPRING_PROFILES_ACTIVE=prod
-ENV SERVER_PORT=8083
+RUN addgroup -S spring && adduser -S spring -G spring
+RUN chown -R spring:spring /app
+USER spring:spring
 
-# Exposition du port
 EXPOSE 8083
 
-# Commande de démarrage de l'application
-ENTRYPOINT ["java","-jar","api.jar"]
+ENV JAVA_OPTS="-XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0"
+
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
