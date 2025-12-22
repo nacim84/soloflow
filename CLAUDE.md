@@ -604,3 +604,91 @@ For production deployment:
 - **Organization Model**: Credits belong to organizations, not individual users
 - **Test vs Live Keys**: Prefix `sk_test_` vs `sk_live_` for different environments
 - **Migration Script**: `npm run migrate:keys` is a ONE-TIME operation (AES to SHA-256); don't run repeatedly
+
+---
+
+# 🔮 MÉMOIRE SYSTÈME & PROTOCOLES OPÉRATIONNELS
+
+Ce fichier définit la configuration, les agents et les protocoles actifs pour ce projet. Il sert de **Mémoire de Base** pour l'assistant IA.
+
+## ⚠️ RÈGLES CRITIQUES UNIVERSELLES
+
+### 1. Gestion de Version (STRICT)
+*   🚫 **INTERDIT** : Commandes git traditionnelles (`git add`, `git commit`, `git push`).
+*   ✅ **OBLIGATOIRE** : Utiliser **GitHub CLI (`gh`)** pour toutes les opérations.
+    *   `gh repo sync`
+    *   `gh pr create --title "..." --body "..."` (Toujours en mode non-interactif)
+    *   `gh pr merge`
+
+### 2. Gestion du Contexte (Shared Context)
+*   L'intelligence du projet est distribuée. La mémoire n'est pas dans ce chat, mais dans `.claude/shared-context/`.
+*   **AVANT** toute tâche : Lire `.claude/shared-context/session-active.md`.
+*   **APRÈS** toute tâche : Mettre à jour `.claude/shared-context/session-active.md`.
+
+---
+
+## 🤖 L'ÉQUIPE D'AGENTS (ROSTER)
+
+Ce projet dispose de **10 agents spécialisés**. Ne tentez pas de tout faire seul ; déléguez selon la spécialité.
+
+| Agent | Rôle & Spécialité | Fichier de définition |
+|-------|-------------------|-----------------------|
+| **Context Manager** 📚 | Gardien de la mémoire, initialise/archive les sessions. | `context-manager-agent.md` |
+| **Explorator Project** 🔍 | Analyse codebase, architecture et patterns existants. | `explorator-project-expert.md` |
+| **SaaS Architect** 🛡️ | Validation des 5 piliers SaaS (Multi-tenancy, RBAC, Scale). | `saas-architect-validator.md` |
+| **UI Designer** 🎨 | Design System, UX, Tailwind, composants visuels. | `saas-ui-ux-specialist.md` |
+| **Fullstack Expert** 🚀 | Dev Next.js/React & Spring Boot. Code production-ready. | `fullstack-expert.md` |
+| **GitHub Ops** 🔧 | Opérations Git via `gh`. Commits, PRs, gestion de branches. | `github-ops-agent.md` |
+| **n8n Specialist** ⚡ | Automatisation de workflows et intégrations. | `n8n-workflow-specialist.md` |
+| **REST API Architect** 🔌 | Design d'API, conventions REST, Sécurité. | `rest-api-architect.md` |
+| **SaaS Marketing** 📈 | Copywriting, Pricing, positionnement produit. | `saas-product-marketing-advisor.md` |
+| **Web Perf/Sec** 🛡️ | Audit de sécurité et optimisation des performances. | `web-perf-security-optimizer.md` |
+
+---
+
+## 🛠️ WORKFLOWS & COMMANDES
+
+### 📋 `/epct` (Explore, Plan, Code, Test)
+**Le workflow standard pour toute nouvelle fonctionnalité.**
+1.  **ANALYSE** : L'IA identifie la nature de la demande.
+2.  **EXPLORE** : Appel à `explorator-project-expert` pour comprendre l'existant.
+3.  **PLAN** : Validation via `saas-architect-validator` ou `saas-ui-ux-specialist`.
+4.  **CODE** : Implémentation via `fullstack-expert`.
+5.  **TEST** : Vérification et build.
+6.  **SAVE** : Commit via `github-ops-agent`.
+
+---
+
+## 🔄 PROTOCOLE DE CONTEXTE PARTAGÉ
+
+Le système repose sur la persistance du contexte pour économiser les tokens et maintenir la cohérence.
+
+### Structure des dossiers
+```
+.claude/
+├── agents/              # Définitions des personas
+├── commands/            # Workflows orchestrés
+├── prompts/             # Prompts système réutilisables
+└── shared-context/      # 🧠 MÉMOIRE VIVE DU PROJET
+    ├── session-active.md      # État actuel (LE FICHIER LE PLUS IMPORTANT)
+    ├── rules.md               # Règles de gestion
+    └── session-history/       # Archives
+```
+
+### Cycle de vie d'une tâche
+1.  **Chargement** : L'agent lit `session-active.md`. Il annonce : *"📖 Contexte chargé : [Résumé]"*.
+2.  **Exécution** : L'agent travaille, modifie le code.
+3.  **Mise à jour** : L'agent écrit dans `session-active.md` sous la section `📝 Travail Effectué`.
+    *   Actions réalisées
+    *   Fichiers modifiés
+    *   Décisions techniques
+4.  **Clôture** : L'agent annonce : *"💾 Contexte mis à jour"*.
+
+---
+
+## 🌟 PRINCIPES DE DÉVELOPPEMENT
+
+1.  **Type Safety** : TypeScript strict, Zod pour la validation. Pas de `any`.
+2.  **Multi-tenancy First** : Toujours supposer que l'app est SaaS (isolation des données).
+3.  **Mobile First** : UI responsive par défaut (Tailwind).
+4.  **No Git Magic** : Tout passe par `gh` CLI pour la traçabilité.

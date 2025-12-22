@@ -15,11 +15,11 @@ public interface WalletRepository extends JpaRepository<Wallet, String> {
     Optional<Wallet> findByOrgId(String orgId);
 
     /**
-     * Atomically decrement wallet balance if positive.
+     * Atomically decrement wallet balance if positive and increment totalUsed.
      * Returns number of rows affected (1 if successful, 0 if insufficient balance).
      */
     @Modifying
-    @Query("UPDATE Wallet w SET w.balance = w.balance - 1, w.updatedAt = CURRENT_TIMESTAMP " +
+    @Query("UPDATE Wallet w SET w.balance = w.balance - 1, w.totalUsed = w.totalUsed + 1, w.updatedAt = CURRENT_TIMESTAMP " +
            "WHERE w.orgId = :orgId AND w.balance > 0")
     int decrementBalanceIfPositive(@Param("orgId") String orgId);
 }

@@ -77,6 +77,6 @@ docker images | grep "soloflow/"
 
 echo ""
 echo "Next steps:"
-echo "  1. Copy .env.docker.example to .env.docker"
-echo "  2. Fill in real secrets in .env.docker"
+echo "  1. Copy .env.example to .env"
+echo "  2. Fill in real secrets in .env"
 echo "  3. Run: ./scripts/deploy-local.sh"

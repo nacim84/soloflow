@@ -16,7 +16,7 @@ export function PricingSection() {
   const [isLoading, setIsLoading] = useState(false);
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
 
-  const handleBuyCredits = async (planType: 'startup' | 'scale') => {
+  const handleBuyCredits = async (planType: 'developer' | 'startup' | 'scale') => {
     setIsLoading(true);
     setLoadingPlan(planType);
 
@@ -81,11 +81,18 @@ export function PricingSection() {
             </p>
 
             <Button
-              asChild
-              variant="outline"
-              className="w-full py-2 rounded-full border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 mb-8"
+              className="w-full py-2 rounded-full bg-zinc-900 dark:bg-white text-white dark:text-black hover:opacity-90 mb-8"
+              onClick={() => handleBuyCredits('developer')}
+              disabled={isLoading}
             >
-              <Link href="/register">Get API Key</Link>
+              {isLoading && loadingPlan === 'developer' ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Loading...
+                </>
+              ) : (
+                "Buy Credits"
+              )}
             </Button>
             <ul className="space-y-4 text-sm text-zinc-600 dark:text-zinc-400">
               <li className="flex gap-2 items-center">

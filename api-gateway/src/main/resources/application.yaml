@@ -9,47 +9,46 @@ spring:
   application:
     name: api-gateway
 
-  # Configuration Custom
-  api:
-    key:
-      pepper: ${API_KEY_PEPPER}
-
+  # Database configuration (can be overridden by profile-specific files)
   datasource:
-    url: jdbc:postgresql://localhost:5434/soloflow_db
-    username: postgres
-    password: postgres
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5434/soloflow_db}
+    username: ${DATABASE_USERNAME:postgres}
+    password: ${DATABASE_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
-    hikari:
-      maximum-pool-size: 20
-      minimum-idle: 5
-      idle-timeout: 300000
-      connection-timeout: 20000
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
+      naming:
+        # CRITICAL: Keep column names as-is (camelCase) to match Drizzle schema
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
     show-sql: false
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-        format_sql: true
+        # Disable auto quoting of identifiers
+        globally_quoted_identifiers: true
 
   cloud:
     gateway:
       mvc:
         routes:
-          - id: service-1
-            uri: http://localhost:8081
+          # API Template Service (Timesheet & Mileage)
+          - id: api-template
+            uri: ${SERVICE_TEMPLATE_URL:http://host.docker.internal:8081}
             predicates:
-              - Path=/api/v1/service-1/**
-          - id: service-2
-            uri: http://localhost:8082
+              - Path=/api/v1/template/**
+          # API PDF Service
+          - id: api-pdf
+            uri: ${SERVICE_PDF_URL:http://host.docker.internal:8082}
             predicates:
-              - Path=/api/v1/service-2/**
-          - id: service-3
-            uri: http://localhost:8083
+              - Path=/api/v1/pdf/**
+          # API Docling Service
+          - id: api-docling
+            uri: ${SERVICE_DOCLING_URL:http://host.docker.internal:8083}
             predicates:
-              - Path=/api/v1/service-3/**
+              - Path=/api/v1/docling/**
         default-filters:
           - name: RequestRateLimiter
             args:
@@ -62,6 +61,12 @@ spring:
     caffeine:
       spec: maximumSize=1000,expireAfterWrite=1h
 
+  # Redis configuration for distributed rate limiting
+  data:
+    redis:
+      host: ${SPRING_DATA_REDIS_HOST:localhost}
+      port: ${SPRING_DATA_REDIS_PORT:6379}
+
 management:
   endpoints:
     web:
@@ -72,3 +77,8 @@ management:
       show-details: always
     info:
       enabled: true
+
+# API Key Configuration
+api:
+  key:
+    pepper: ${API_KEY_PEPPER:dev-pepper-change-in-production}

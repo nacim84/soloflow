@@ -33,43 +33,43 @@ if ! docker info > /dev/null 2>&1; then
     exit 1
 fi
 
-# Check .env.docker exists
-if [ ! -f ".env.docker" ]; then
-    echo -e "${YELLOW}WARNING: .env.docker not found${NC}"
+# Check .env exists
+if [ ! -f ".env" ]; then
+    echo -e "${YELLOW}WARNING: .env not found${NC}"
     echo ""
-    echo "Creating .env.docker from .env.docker.example..."
+    echo "Creating .env from .env.example..."
 
-    if [ -f ".env.docker.example" ]; then
-        cp .env.docker.example .env.docker
-        echo -e "${YELLOW}⚠ IMPORTANT: Edit .env.docker and fill in real secrets!${NC}"
+    if [ -f ".env.example" ]; then
+        cp .env.example .env
+        echo -e "${YELLOW}⚠ IMPORTANT: Edit .env and fill in real secrets!${NC}"
         echo ""
         echo "Required secrets:"
         echo "  - API_KEY_PEPPER (generate with: openssl rand -base64 32)"
         echo "  - BETTER_AUTH_SECRET (generate with: openssl rand -base64 32)"
         echo "  - STRIPE_SECRET_KEY"
-        echo "  - Other optional secrets (see .env.docker)"
+        echo "  - Other optional secrets (see .env)"
         echo ""
-        read -p "Press Enter after editing .env.docker, or Ctrl+C to cancel..."
+        read -p "Press Enter after editing .env, or Ctrl+C to cancel..."
     else
-        echo -e "${RED}ERROR: .env.docker.example not found${NC}"
+        echo -e "${RED}ERROR: .env.example not found${NC}"
         exit 1
     fi
 fi
 
 # Generate secrets if they don't exist
-source .env.docker 2>/dev/null || true
+source .env 2>/dev/null || true
 
 if [ -z "$API_KEY_PEPPER" ] || [ "$API_KEY_PEPPER" == "your_pepper_here_use_openssl_rand_base64_32" ]; then
     echo -e "${YELLOW}Generating API_KEY_PEPPER...${NC}"
     NEW_PEPPER=$(openssl rand -base64 32)
-    sed -i.bak "s|API_KEY_PEPPER=.*|API_KEY_PEPPER=$NEW_PEPPER|" .env.docker
+    sed -i.bak "s|API_KEY_PEPPER=.*|API_KEY_PEPPER=$NEW_PEPPER|" .env
     echo -e "${GREEN}✓ Generated API_KEY_PEPPER${NC}"
 fi
 
 if [ -z "$BETTER_AUTH_SECRET" ] || [ "$BETTER_AUTH_SECRET" == "your_auth_secret_here_use_openssl_rand_base64_32" ]; then
     echo -e "${YELLOW}Generating BETTER_AUTH_SECRET...${NC}"
     NEW_SECRET=$(openssl rand -base64 32)
-    sed -i.bak "s|BETTER_AUTH_SECRET=.*|BETTER_AUTH_SECRET=$NEW_SECRET|" .env.docker
+    sed -i.bak "s|BETTER_AUTH_SECRET=.*|BETTER_AUTH_SECRET=$NEW_SECRET|" .env
     echo -e "${GREEN}✓ Generated BETTER_AUTH_SECRET${NC}"
 fi
 
