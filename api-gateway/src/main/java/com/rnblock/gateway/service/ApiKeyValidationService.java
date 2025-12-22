@@ -4,8 +4,10 @@ import com.rnblock.gateway.exception.InsufficientCreditsException;
 import com.rnblock.gateway.exception.InvalidApiKeyException;
 import com.rnblock.gateway.exception.RateLimitExceededException;
 import com.rnblock.gateway.model.ApiKey;
+import com.rnblock.gateway.model.TestWallet;
 import com.rnblock.gateway.model.Wallet;
 import com.rnblock.gateway.repository.ApiKeyRepository;
+import com.rnblock.gateway.repository.TestWalletRepository;
 import com.rnblock.gateway.repository.WalletRepository;
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.BucketConfiguration;
@@ -36,6 +38,7 @@ public class ApiKeyValidationService {
 
     private final ApiKeyRepository apiKeyRepository;
     private final WalletRepository walletRepository;
+    private final TestWalletRepository testWalletRepository;
     private final CacheManager cacheManager;
     private final LettuceBasedProxyManager<String> rateLimitProxyManager;
 
@@ -88,22 +91,45 @@ public class ApiKeyValidationService {
             throw new RateLimitExceededException("Rate limit exceeded");
         }
 
-        // Atomic credit deduction on Wallet
-        int rowsUpdated = walletRepository.decrementBalanceIfPositive(apiKey.getOrgId());
-        if (rowsUpdated == 0) {
-            log.warn("Insufficient credits for org: {}", apiKey.getOrgId());
-            throw new InsufficientCreditsException("Insufficient credits");
+        // Atomic credit deduction based on environment (test vs production)
+        int remainingCredits;
+        boolean isTestEnvironment = "test".equalsIgnoreCase(apiKey.getEnvironment());
+
+        if (isTestEnvironment) {
+            // Test environment: use test_wallets (linked to userId/createdBy)
+            String userId = apiKey.getCreatedBy();
+            if (userId == null) {
+                log.error("Test API key has no createdBy userId: {}", keyHash);
+                throw new InvalidApiKeyException("Test API key configuration error");
+            }
+
+            int rowsUpdated = testWalletRepository.decrementBalanceIfPositive(userId);
+            if (rowsUpdated == 0) {
+                log.warn("Insufficient test credits for user: {}", userId);
+                throw new InsufficientCreditsException("Insufficient test credits");
+            }
+
+            TestWallet testWallet = testWalletRepository.findByUserId(userId)
+                    .orElseThrow(() -> new RuntimeException("Test wallet not found for user: " + userId));
+
+            remainingCredits = testWallet.getBalance();
+            log.debug("Test API key validated: {}, user: {}, credits: {}", keyHash, userId, remainingCredits);
+        } else {
+            // Production environment: use wallets (linked to orgId)
+            int rowsUpdated = walletRepository.decrementBalanceIfPositive(apiKey.getOrgId());
+            if (rowsUpdated == 0) {
+                log.warn("Insufficient credits for org: {}", apiKey.getOrgId());
+                throw new InsufficientCreditsException("Insufficient credits");
+            }
+
+            Wallet wallet = walletRepository.findByOrgId(apiKey.getOrgId())
+                    .orElseThrow(() -> new RuntimeException("Wallet not found for org: " + apiKey.getOrgId()));
+
+            remainingCredits = wallet.getBalance();
+            log.debug("API key validated successfully: {}, org: {}, credits: {}", keyHash, apiKey.getOrgId(), remainingCredits);
         }
 
-        // Get current balance for details (optional, requires extra query or just return -1 if lazy)
-        // For performance, we might skip fetching the exact balance if not strictly needed by downstream
-        // But let's fetch it to be nice.
-        Wallet wallet = walletRepository.findByOrgId(apiKey.getOrgId())
-                .orElseThrow(() -> new RuntimeException("Wallet not found for org: " + apiKey.getOrgId()));
-
-        log.debug("API key validated successfully: {}, org: {}, credits: {}", keyHash, apiKey.getOrgId(), wallet.getBalance());
-
-        return new ApiKeyDetails(keyHash, apiKey.getOrgId(), wallet.getBalance());
+        return new ApiKeyDetails(keyHash, apiKey.getOrgId(), remainingCredits);
     }
 
     private String hashApiKey(String input) {

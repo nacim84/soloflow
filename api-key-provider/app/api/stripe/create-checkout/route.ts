@@ -4,13 +4,18 @@ import { getStripe } from "@/lib/stripe";
 
 // Credit plan configurations
 const CREDIT_PLANS = {
+  developer: {
+    priceId: process.env.STRIPE_PRICE_DEVELOPPER_PLAN!,
+    credits: 1000,
+    name: "Developer Pack",
+  },
   startup: {
-    priceId: process.env.STRIPE_PRICE_STARTUP_PACK!,
+    priceId: process.env.STRIPE_PRICE_STARTUP_PACK_PLAN!,
     credits: 5000,
     name: "Startup Pack",
   },
   scale: {
-    priceId: process.env.STRIPE_PRICE_SCALE!,
+    priceId: process.env.STRIPE_PRICE_SCALE_PLANE!,
     credits: 25000,
     name: "Scale Pack",
   },
@@ -43,14 +48,14 @@ export async function POST(req: Request) {
   }
 
   // 2. Parse and validate planType
-  let planType: 'startup' | 'scale';
+  let planType: 'developer' | 'startup' | 'scale';
   try {
     const body = await req.json();
     planType = body.planType;
 
-    if (!planType || !['startup', 'scale'].includes(planType)) {
+    if (!planType || !['developer', 'startup', 'scale'].includes(planType)) {
       return new Response(
-        JSON.stringify({ error: "Invalid plan type. Must be 'startup' or 'scale'" }),
+        JSON.stringify({ error: "Invalid plan type. Must be 'developer', 'startup' or 'scale'" }),
         { status: 400 }
       );
     }

@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X, KeyRound } from "lucide-react";
-import { useSession } from "@/lib/auth-client";
+import { useServerSession } from "@/components/session-provider";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -28,10 +28,10 @@ const navLinks = [
 
 export function Navbar() {
   const pathname = usePathname();
-  const { data: session, isPending } = useSession();
+  const { user } = useServerSession();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const isAuthenticated = !!session?.user;
+  const isAuthenticated = !!user;
 
   const visibleLinks = navLinks.filter(
     (link) => !link.authRequired || isAuthenticated,
@@ -94,9 +94,7 @@ export function Navbar() {
           <div className="hidden h-6 w-px bg-zinc-200 dark:bg-zinc-800 md:block" />
 
           {/* Auth State */}
-          {isPending ? (
-            <div className="h-8 w-20 animate-pulse rounded-md bg-zinc-200 dark:bg-zinc-800" />
-          ) : isAuthenticated ? (
+          {isAuthenticated ? (
             <UserMenu />
           ) : (
             <div className="hidden items-center gap-2 md:flex">
