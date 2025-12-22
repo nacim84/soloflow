@@ -129,7 +129,7 @@ public class ApiKeyValidationService {
             log.debug("API key validated successfully: {}, org: {}, credits: {}", keyHash, apiKey.getOrgId(), remainingCredits);
         }
 
-        return new ApiKeyDetails(keyHash, apiKey.getOrgId(), remainingCredits);
+        return new ApiKeyDetails(apiKey.getId(), keyHash, apiKey.getOrgId(), remainingCredits);
     }
 
     private String hashApiKey(String input) {
@@ -153,5 +153,5 @@ public class ApiKeyValidationService {
     /**
      * Details returned after successful validation.
      */
-    public record ApiKeyDetails(String keyHash, String orgId, int remainingCredits) {}
+    public record ApiKeyDetails(String apiKeyId, String keyHash, String orgId, int remainingCredits) {}
 }

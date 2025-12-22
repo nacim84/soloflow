@@ -8,7 +8,7 @@ dotenv.config({ path: ".env.local" });
 
 const realServices = [
   {
-    name: "pdf",
+    name: "api-pdf",
     displayName: "PDF Manipulation",
     icon: "FileText",
     category: "document",
@@ -18,7 +18,7 @@ const realServices = [
     isActive: true,
   },
   {
-    name: "ai",
+    name: "api-docling",
     displayName: "Document Intelligence AI",
     icon: "Brain",
     category: "ai",
@@ -28,7 +28,7 @@ const realServices = [
     isActive: true,
   },
   {
-    name: "mileage",
+    name: "api-template",
     displayName: "Mileage Expenses Generator",
     icon: "Car",
     category: "finance",

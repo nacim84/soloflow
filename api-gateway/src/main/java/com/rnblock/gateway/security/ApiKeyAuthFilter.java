@@ -2,6 +2,7 @@ package com.rnblock.gateway.security;
 
 import com.rnblock.gateway.exception.InvalidApiKeyException;
 import com.rnblock.gateway.service.ApiKeyValidationService;
+import com.rnblock.gateway.service.UsageLoggingService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,6 +25,7 @@ import java.io.IOException;
 public class ApiKeyAuthFilter extends OncePerRequestFilter {
 
     private final ApiKeyValidationService validationService;
+    private final UsageLoggingService usageLoggingService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -33,15 +35,35 @@ public class ApiKeyAuthFilter extends OncePerRequestFilter {
             throw new InvalidApiKeyException("API key header is missing or invalid");
         }
 
+        long startTime = System.currentTimeMillis();
+        ApiKeyValidationService.ApiKeyDetails keyDetails = null;
+
         try {
-            validationService.validateApiKey(apiKey);
+            keyDetails = validationService.validateApiKey(apiKey);
             log.debug("API key validated for path: {}", request.getRequestURI());
         } catch (Exception e) {
             log.warn("API key validation failed for path {}: {}", request.getRequestURI(), e.getMessage());
             throw e; // Let GlobalExceptionHandler handle
         }
 
-        filterChain.doFilter(request, response);
+        try {
+            filterChain.doFilter(request, response);
+        } finally {
+            if (keyDetails != null) {
+                // Async logging
+                usageLoggingService.logRequest(
+                        keyDetails.apiKeyId(),
+                        keyDetails.orgId(),
+                        request.getRequestURI(),
+                        request.getMethod(),
+                        response.getStatus(),
+                        System.currentTimeMillis() - startTime,
+                        1, // Default cost 1 credit per call (could be dynamic in future)
+                        extractClientIp(request),
+                        request.getHeader("User-Agent")
+                );
+            }
+        }
     }
 
     private String extractApiKey(HttpServletRequest request) {
@@ -58,6 +80,14 @@ public class ApiKeyAuthFilter extends OncePerRequestFilter {
         }
 
         return null;
+    }
+
+    private String extractClientIp(HttpServletRequest request) {
+        String xForwardedFor = request.getHeader("X-Forwarded-For");
+        if (xForwardedFor != null && !xForwardedFor.isEmpty()) {
+            return xForwardedFor.split(",")[0].trim();
+        }
+        return request.getRemoteAddr();
     }
 
     @Override

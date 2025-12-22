@@ -25,6 +25,7 @@ interface UsageClientProps {
     name: string;
     email: string;
   };
+  orgId: string;
 }
 
 interface UsageLog {
@@ -52,7 +53,7 @@ const timeFilters = [
   { id: "all", label: "Tout" },
 ];
 
-export function UsageClient({ user }: UsageClientProps) {
+export function UsageClient({ user, orgId }: UsageClientProps) {
   const router = useRouter();
   const [logs, setLogs] = useState<UsageLog[]>([]);
   const [credits, setCredits] = useState<Credits>({
@@ -65,14 +66,31 @@ export function UsageClient({ user }: UsageClientProps) {
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [orgId]);
 
   const loadData = async () => {
     setLoading(true);
+    try {
+      // 1. Fetch Logs
+      const logsResult = await getOrgUsageLogsAction(orgId, 100);
+      if (logsResult.success && logsResult.data) {
+        setLogs(logsResult.data);
+      }
 
-    // Simulation de données pour l'UI si l'API n'est pas connectée
-    // À remplacer par les vrais appels API une fois connectés
-    setLoading(false);
+      // 2. Fetch Wallet Info
+      const walletResult = await getOrgWalletAction(orgId);
+      if (walletResult.success && walletResult.data) {
+        setCredits({
+          balance: walletResult.data.balance,
+          totalPurchased: walletResult.data.totalPurchased,
+          totalUsed: walletResult.data.totalUsed,
+        });
+      }
+    } catch (error) {
+      console.error("Failed to load usage data", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const totalCreditsUsed = logs.reduce((acc, log) => acc + log.creditsUsed, 0);
