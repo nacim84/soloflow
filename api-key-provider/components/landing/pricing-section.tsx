@@ -16,7 +16,7 @@ export function PricingSection() {
   const [isLoading, setIsLoading] = useState(false);
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
 
-  const handleBuyCredits = async (planType: 'developer' | 'startup' | 'scale') => {
+  const handleBuyCredits = async (planType: 'startup' | 'scale') => {
     setIsLoading(true);
     setLoadingPlan(planType);
 
@@ -51,18 +51,9 @@ export function PricingSection() {
           <h2 className="text-3xl md:text-4xl font-bold mb-6 text-zinc-900 dark:text-white">
             Simple, Usage-Based Pricing
           </h2>
-          <p className="text-zinc-500 dark:text-zinc-400 max-w-xl mx-auto mb-8">
+          <p className="text-zinc-500 dark:text-zinc-400 max-w-xl mx-auto">
             Start free, buy credits when you need them. Credits valid for 1 year.
           </p>
-
-          <div className="inline-flex bg-white dark:bg-zinc-900 rounded-full p-1 border border-zinc-200 dark:border-white/10 relative shadow-sm dark:shadow-none">
-            <button className="px-6 py-2 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-white text-sm font-medium shadow-sm relative z-10 border border-zinc-200 dark:border-transparent">
-              Prepaid Credits
-            </button>
-            <button className="px-6 py-2 rounded-full text-sm font-medium hover:text-indigo-600 dark:hover:text-white text-zinc-500 dark:text-zinc-400 transition-colors relative z-10">
-              Enterprise
-            </button>
-          </div>
         </div>
       </FadeIn>
 
@@ -74,25 +65,18 @@ export function PricingSection() {
               Developer
             </h3>
             <div className="text-4xl font-bold mb-2 text-zinc-900 dark:text-white">
-              $0
+              0€
             </div>
             <p className="text-zinc-500 text-xs mb-6">
               Forever free sandbox access
             </p>
 
             <Button
-              className="w-full py-2 rounded-full bg-zinc-900 dark:bg-white text-white dark:text-black hover:opacity-90 mb-8"
-              onClick={() => handleBuyCredits('developer')}
-              disabled={isLoading}
+              asChild
+              variant="outline"
+              className="w-full py-2 rounded-full border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 mb-8"
             >
-              {isLoading && loadingPlan === 'developer' ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Loading...
-                </>
-              ) : (
-                "Buy Credits"
-              )}
+              <Link href="/register">Get API Key</Link>
             </Button>
             <ul className="space-y-4 text-sm text-zinc-600 dark:text-zinc-400">
               <li className="flex gap-2 items-center">
@@ -127,10 +111,10 @@ export function PricingSection() {
               Startup Pack
             </h3>
             <div className="text-4xl font-bold mb-2 text-zinc-900 dark:text-white">
-              $3.99
+              5,99€
             </div>
             <p className="text-zinc-500 text-xs mb-6">
-              5,000 Credits (Valid 1 year)
+              5 000 Credits (Valid 1 year)
             </p>
 
             <Button
@@ -183,10 +167,10 @@ export function PricingSection() {
               Scale
             </h3>
             <div className="text-4xl font-bold mb-2 text-zinc-900 dark:text-white">
-              $9.99
+              9,99€
             </div>
             <p className="text-zinc-500 text-xs mb-6">
-              25,000 Credits + Volume discount
+              25 000 Credits + Volume discount
             </p>
 
             <Button

@@ -19,7 +19,6 @@ import { CreditsBadge } from "@/components/credits-badge";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
-  { href: "/", label: "Home", authRequired: false },
   { href: "/#pricing", label: "Pricing", authRequired: false },
   { href: "/keys", label: "My Keys", authRequired: true },
   { href: "/services", label: "Services", authRequired: true },
