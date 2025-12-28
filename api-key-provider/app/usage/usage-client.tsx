@@ -15,7 +15,7 @@ import { Badge } from "@/components/ui/badge";
 import { useState, useEffect } from "react";
 import {
   getOrgUsageLogsAction,
-  getOrgWalletAction,
+  getUserTotalCredits,
 } from "@/app/actions/api-key-actions";
 import { useRouter } from "next/navigation";
 
@@ -41,7 +41,9 @@ interface UsageLog {
 }
 
 interface Credits {
-  balance: number;
+  totalBalance: number;
+  testBalance: number;
+  orgBalance: number;
   totalPurchased: number;
   totalUsed: number;
 }
@@ -57,7 +59,9 @@ export function UsageClient({ user, orgId }: UsageClientProps) {
   const router = useRouter();
   const [logs, setLogs] = useState<UsageLog[]>([]);
   const [credits, setCredits] = useState<Credits>({
-    balance: 0,
+    totalBalance: 0,
+    testBalance: 0,
+    orgBalance: 0,
     totalPurchased: 0,
     totalUsed: 0,
   });
@@ -77,13 +81,15 @@ export function UsageClient({ user, orgId }: UsageClientProps) {
         setLogs(logsResult.data);
       }
 
-      // 2. Fetch Wallet Info
-      const walletResult = await getOrgWalletAction(orgId);
-      if (walletResult.success && walletResult.data) {
+      // 2. Fetch Total Credits (test + org wallets)
+      const creditsResult = await getUserTotalCredits();
+      if (creditsResult.success && creditsResult.data) {
         setCredits({
-          balance: walletResult.data.balance,
-          totalPurchased: walletResult.data.totalPurchased,
-          totalUsed: walletResult.data.totalUsed,
+          totalBalance: creditsResult.data.totalBalance,
+          testBalance: creditsResult.data.testBalance,
+          orgBalance: creditsResult.data.orgBalance,
+          totalPurchased: 0, // TODO: Récupérer depuis le wallet org si nécessaire
+          totalUsed: 0, // TODO: Calculer depuis les logs si nécessaire
         });
       }
     } catch (error) {
@@ -117,7 +123,7 @@ export function UsageClient({ user, orgId }: UsageClientProps) {
   };
 
   const lowCreditsThreshold = 100;
-  const showLowCreditsAlert = credits.balance < lowCreditsThreshold;
+  const showLowCreditsAlert = credits.totalBalance < lowCreditsThreshold;
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl">
@@ -168,12 +174,6 @@ export function UsageClient({ user, orgId }: UsageClientProps) {
                 <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Crédits Utilisés</p>
                 <div className="ml-auto text-right">
                   <p className="text-2xl font-bold text-zinc-900 dark:text-white">{totalCreditsUsed}</p>
-                  {credits.totalUsed > 0 && (
-                    <Badge variant="secondary" className="mt-1 bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
-                      <ArrowUp className="h-3 w-3 mr-1" />
-                      {Math.round((totalCreditsUsed / credits.totalUsed) * 100)}%
-                    </Badge>
-                  )}
                 </div>
               </div>
 
@@ -223,7 +223,7 @@ export function UsageClient({ user, orgId }: UsageClientProps) {
                       Solde de crédits faible
                     </h3>
                     <p className="text-sm text-amber-700 dark:text-amber-400 mt-1 mb-3">
-                      Il vous reste <strong>{credits.balance} crédits</strong>. 
+                      Il vous reste <strong>{credits.totalBalance} crédits</strong>.
                       Pour éviter toute interruption de service sur vos applications en production, pensez à recharger.
                     </p>
                     <Button
