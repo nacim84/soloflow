@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(dir C:UsersrabiaWorkspacesoloflowservices)",
+      "Bash(./mvnw clean:*)",
+      "Bash(mvn clean install:*)",
+      "Bash(npm run build:*)",
+      "Bash(git push:*)",
+      "Bash(cat:*)",
+      "Bash(find:*)",
+      "Bash(xargs ls:*)",
+      "Bash(docker-compose:*)",
+      "Bash(docker ps:*)",
+      "Bash(npx drizzle-kit:*)",
+      "Bash(mvn clean compile:*)",
+      "Bash(git checkout:*)",
+      "Bash(ls:*)",
+      "Bash(dir:*)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(timeout 60 bash:*)",
+      "Bash(curl:*)"
+    ]
+  }
+}

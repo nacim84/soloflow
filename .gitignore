@@ -25,5 +25,5 @@ target/
 *.class
 
 # AI
-.claude/
-.gemini/
+#.claude/
+#.gemini/
