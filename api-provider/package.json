@@ -1,5 +1,5 @@
 {
-  "name": "api-key-provider",
+  "name": "api-provider",
   "version": "1.0.0",
   "description": "Gestionnaire de clés API avec système de crédits",
   "private": true,

@@ -55,7 +55,7 @@ echo "---------------------------------------"
 docker build \
     -t soloflow/provider:latest \
     -t soloflow/provider:$(date +%Y%m%d) \
-    ./api-key-provider
+    ./api-provider
 
 if [ $? -eq 0 ]; then
     echo -e "${GREEN}✓ Provider image built successfully${NC}"

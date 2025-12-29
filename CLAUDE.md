@@ -7,8 +7,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 SoloFlow is an **API monetization ecosystem** with atomic credit-based billing. It consists of four main components:
 
 1. **API Gateway** (`/api-gateway`) - Spring Boot enforcement layer for security and billing
-2. **API Key Provider** (`/api-key-provider`) - Next.js developer portal for key management and credit purchasing
-3. **Admin User** (`/admin-user`) - Next.js admin dashboard for user and organization management
+2. **API Provider** (`/api-provider`) - Next.js developer portal for key management and credit purchasing
+3. **API Admin** (`/api-admin`) - Next.js admin dashboard for user and organization management
 4. **Backend Services** (`/services`) - Microservices providing business value (e.g., PDF tools, AI, mileage)
 
 **Core Architecture Principle**: The Gateway and Provider share a single PostgreSQL database to ensure atomic consistency between credit balance and API usage. This eliminates sync latency and prevents race conditions.
@@ -49,11 +49,11 @@ docker-compose -f docker-compose.dev.yml up -d
 make clean                  # or ./mvnw clean
 ```
 
-### API Key Provider (Next.js)
+### API Provider (Next.js)
 
 ```bash
 # Navigate to provider directory
-cd api-key-provider
+cd api-provider
 
 # Install dependencies
 npm install
@@ -86,11 +86,11 @@ npm run seed:services  # Seed the 3 real services (PDF, AI, Mileage)
 npm run migrate:keys   # Migrate from AES-256 to SHA-256 hashing
 ```
 
-### Admin User Dashboard (Next.js)
+### API Admin Dashboard (Next.js)
 
 ```bash
-# Navigate to admin-user directory
-cd admin-user
+# Navigate to api-admin directory
+cd api-admin
 
 # Install dependencies
 npm install
@@ -121,12 +121,12 @@ make docker-dev-down         # Stop PostgreSQL
 # or: docker-compose -f docker-compose.dev.yml up -d
 
 # For Provider development:
-cd api-key-provider
+cd api-provider
 npm run docker:dev:up        # Start PostgreSQL (port 5434)
 npm run docker:dev:down      # Stop PostgreSQL
 # or: docker-compose -f docker-compose.dev.yml up -d
 
-# Production: Full stack (PostgreSQL + Gateway + Provider + Admin User)
+# Production: Full stack (PostgreSQL + Gateway + Provider + Admin)
 # From project root
 docker-compose -f docker-compose.production.yml up -d
 ```
@@ -172,12 +172,12 @@ Backend Service Response
 
 ### Shared Database Architecture
 
-Both `api-gateway` and `api-key-provider` connect to the same PostgreSQL instance:
+Both `api-gateway` and `api-provider` connect to the same PostgreSQL instance:
 
 - **Gateway**: Uses JPA/Hibernate with raw JDBC for atomic updates
 - **Provider**: Uses Drizzle ORM for type-safe schema management
 
-**Important**: When modifying database schema in `api-key-provider/drizzle/schema.ts`, ensure compatibility with Gateway's JPA entities in `api-gateway/src/main/java/com/rnblock/gateway/model/`.
+**Important**: When modifying database schema in `api-provider/drizzle/schema.ts`, ensure compatibility with Gateway's JPA entities in `api-gateway/src/main/java/com/rnblock/gateway/model/`.
 
 ### Key Tables
 
@@ -220,7 +220,7 @@ src/main/resources/
 └── application.yaml              # Spring config (DB, routing, cache)
 ```
 
-### API Key Provider (`/api-key-provider`)
+### API Provider (`/api-provider`)
 
 ```
 app/
@@ -267,7 +267,7 @@ spring:
               - Path=/api/v1/service-1/**
 ```
 
-### API Key Provider (`.env.local`)
+### API Provider (`.env.local`)
 
 ```env
 # Database (MUST match Gateway's database)
@@ -302,7 +302,7 @@ RESEND_API_KEY=...
 - **Error Handling**: All exceptions throw custom exceptions (InvalidApiKeyException, InsufficientCreditsException) handled by GlobalExceptionHandler
 - **Transaction Management**: Credit deduction uses `@Transactional` with atomic SQL updates
 
-### TypeScript (API Key Provider)
+### TypeScript (API Provider)
 
 - **Framework**: Next.js 16 App Router (Server Components by default)
 - **Server Actions**: Used for mutations (located in `app/actions/`)
@@ -316,7 +316,7 @@ RESEND_API_KEY=...
 
 When changing the database schema:
 
-1. **Update Drizzle Schema** (`api-key-provider/drizzle/schema.ts`)
+1. **Update Drizzle Schema** (`api-provider/drizzle/schema.ts`)
 2. **Generate Migration**: `npm run db:generate`
 3. **Apply Migration**: `npm run db:migrate` OR `npm run db:push` (dev only)
 4. **Update JPA Entities** in `api-gateway/src/main/java/com/rnblock/gateway/model/`
@@ -409,8 +409,8 @@ The system supports multi-organization (B2B) architecture:
 ## Port Allocation
 
 - API Gateway: `8080`
-- API Key Provider: `3000`
-- Admin User Dashboard: `3001`
+- API Provider: `3000`
+- API Admin Dashboard: `3001`
 - PostgreSQL: `5434` (NOTE: Not the default 5432!)
 - pgAdmin: `6432` (mapped to port 80 in container)
 - Backend Services: `8081`, `8082`, `8083`, etc.
@@ -465,7 +465,7 @@ The Gateway returns structured JSON error responses:
 #### 1. API Key Not Working
 ```bash
 # Check if key exists and is active
-# In api-key-provider database
+# In api-provider database
 psql -h localhost -p 5434 -U postgres soloflow_db
 SELECT id, "keyHash", "orgId", "isActive" FROM api_keys WHERE "keyHash" = 'your_hash_here';
 

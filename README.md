@@ -2,7 +2,7 @@
 
 ## Description du Projet
 
-SoloFlow est un écosystème API complet conçu pour monétiser et sécuriser l'accès à divers microservices. Il se compose d'une **API Gateway** centralisée qui gère la sécurité et la facturation (crédits), et d'un **Portail Développeur** (API Key Provider) où les utilisateurs peuvent gérer leurs clés API et acheter des crédits.
+SoloFlow est un écosystème API complet conçu pour monétiser et sécuriser l'accès à divers microservices. Il se compose d'une **API Gateway** centralisée qui gère la sécurité et la facturation (crédits), et d'un **Portail Développeur** (API Provider) où les utilisateurs peuvent gérer leurs clés API et acheter des crédits.
 
 La philosophie centrale est la **Monétisation Atomique** : l'accès est accordé et facturé en temps réel via une architecture de base de données partagée, garantissant une cohérence stricte entre le solde d'un utilisateur et son utilisation de l'API.
 
@@ -10,7 +10,7 @@ La philosophie centrale est la **Monétisation Atomique** : l'accès est accord�
 
 ```mermaid
 graph TD
-    User((Developer)) -->|1. Inscription & Achat Crédits| Portal[API Key Provider (Next.js)]
+    User((Developer)) -->|1. Inscription & Achat Crédits| Portal[API Provider (Next.js)]
     Portal -->|Écrit Clés/Crédits| DB[(PostgreSQL Partagée)]
     
     ClientApp[Application Cliente] -->|2. Requête API + Clé| Gateway[API Gateway (Spring Boot)]
@@ -26,7 +26,7 @@ Pour configurer et faire fonctionner l'ensemble de l'écosystème SoloFlow, suiv
 
 ### Prérequis
 
--   **Node.js**: Version 20+ (pour `api-key-provider`)
+-   **Node.js**: Version 20+ (pour `api-provider`)
 -   **Java**: JDK 21 (pour `api-gateway`)
 -   **Maven**: Outil de build (pour `api-gateway`)
 -   **Docker**: Pour faire fonctionner la base de données PostgreSQL.
@@ -40,10 +40,10 @@ Pour configurer et faire fonctionner l'ensemble de l'écosystème SoloFlow, suiv
     ```
 
 2.  **Base de Données PostgreSQL** :
-    Le projet `api-key-provider` contient un `docker-compose.yml` pour démarrer PostgreSQL.
-    Naviguez dans le dossier `api-key-provider` et lancez la DB :
+    Le projet `api-provider` contient un `docker-compose.yml` pour démarrer PostgreSQL.
+    Naviguez dans le dossier `api-provider` et lancez la DB :
     ```bash
-    cd api-key-provider
+    cd api-provider
     docker-compose up -d
     ```
     Assurez-vous que la base de données est accessible sur `localhost:5432` et que les variables d'environnement dans `.env.local` sont correctement configurées pour pointer vers cette DB.
@@ -51,7 +51,7 @@ Pour configurer et faire fonctionner l'ensemble de l'écosystème SoloFlow, suiv
 3.  **API Key Provider (Next.js)** :
     Installez les dépendances et configurez la base de données.
     ```bash
-    cd api-key-provider
+    cd api-provider
     npm install
     cp .env.local.example .env.local # Configurez vos variables d'environnement
     npm run db:push # Pousse le schéma Drizzle vers la DB
@@ -68,12 +68,12 @@ Pour configurer et faire fonctionner l'ensemble de l'écosystème SoloFlow, suiv
 
 ## Utilisation
 
-Une fois que les deux services (`api-key-provider` et `api-gateway`) sont en cours d'exécution et que la base de données est initialisée :
+Une fois que les deux services (`api-provider` et `api-gateway`) sont en cours d'exécution et que la base de données est initialisée :
 
 ### Scénario Typique d'Utilisation
 
 1.  **Inscription et Achat de Crédits** :
-    Accédez au Portail Développeur (par défaut sur `http://localhost:3000` si vous exécutez `api-key-provider` en mode développement).
+    Accédez au Portail Développeur (par défaut sur `http://localhost:3000` si vous exécutez `api-provider` en mode développement).
     -   Créez un compte.
     -   Achetez des crédits via l'interface de facturation.
 
@@ -91,7 +91,7 @@ Une fois que les deux services (`api-key-provider` et `api-gateway`) sont en cou
 
 Nous accueillons les contributions ! Veuillez suivre les lignes directrices suivantes :
 
--   **Structure Monorepo-ish** : Les services distincts résident dans des répertoires de premier niveau (`api-gateway`, `api-key-provider`, `services`).
+-   **Structure Monorepo-ish** : Les services distincts résident dans des répertoires de premier niveau (`api-gateway`, `api-provider`, `services`).
 -   **Conventions Java (Gateway)** : Suivez les conventions de style Spring Boot et Maven. Les tests unitaires sont découragés pour les filtres de sécurité, l'accent est mis sur les tests d'intégration.
 -   **Conventions TypeScript (Provider)** : Adhérez aux conventions Next.js (App Router), TypeScript strict et Tailwind CSS. Utilisez Zod pour la validation.
 -   **Base de Données** : Toute modification de schéma doit être compatible avec les deux applications utilisant la base de données partagée.

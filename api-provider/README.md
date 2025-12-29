@@ -1,4 +1,4 @@
-# 🔐 API Key Provider - Portail Développeur & Gestion de Clés
+# 🔐 API Provider - Portail Développeur & Gestion de Clés
 
 > **Application web moderne pour générer et gérer des clés API permettant de consommer les services de l'API Gateway, avec un système de crédits intégré.**
 
@@ -52,7 +52,7 @@ npm run migrate:keys       # Migration AES → SHA-256 (une seule fois)
 
 ## 📖 Description
 
-**API Key Provider** est le front-end de gestion pour mon écosystème d'APIs. Il permet aux utilisateurs (développeurs, entreprises) de s'inscrire, d'acheter des crédits via Stripe, et de générer des **Clés API (API Keys)**.
+**API Provider** est le front-end de gestion pour mon écosystème d'APIs. Il permet aux utilisateurs (développeurs, entreprises) de s'inscrire, d'acheter des crédits via Stripe, et de générer des **Clés API (API Keys)**.
 
 Ces clés sont ensuite utilisées pour authentifier les requêtes HTTP envoyées vers l'**API Gateway**. Grâce à la base de données partagée, l'API Gateway peut instantanément valider une clé générée ici et vérifier si l'utilisateur possède assez de crédits pour effectuer l'action demandée.
 
@@ -136,7 +136,7 @@ L'élément central est la base de données PostgreSQL partagée.
 
 ```mermaid
 graph TD
-    User((Développeur)) -->|Génère Clé & Achète Crédits| Dashboard[API Key Provider Next.js]
+    User((Développeur)) -->|Génère Clé & Achète Crédits| Dashboard[API Provider Next.js]
     User -->|Requête API + Clé| Gateway[API Gateway App]
     
     Dashboard -->|Write Keys & Credits| DB[(Shared PostgreSQL)]
@@ -165,8 +165,8 @@ graph TD
 
 ```bash
 # 1. Cloner le repository
-git clone https://github.com/votre-username/api-key-provider.git
-cd api-key-provider
+git clone https://github.com/votre-username/api-provider.git
+cd api-provider
 
 # 2. Installer les dépendances
 npm install

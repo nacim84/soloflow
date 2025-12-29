@@ -85,7 +85,7 @@ services:
 
   provider:
     build:
-      context: ./api-key-provider
+      context: ./api-provider
       dockerfile: Dockerfile
     container_name: soloflow-provider
     restart: always
@@ -118,11 +118,11 @@ services:
     networks:
       - soloflow-network
 
-  admin-user:
+  admin:
     build:
-      context: ./admin-user
+      context: ./api-admin
       dockerfile: Dockerfile
-    container_name: soloflow-admin-user
+    container_name: soloflow-admin
     restart: always
     ports:
       - "3001:3001"

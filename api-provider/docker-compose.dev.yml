@@ -3,7 +3,7 @@ version: "3.9"
 services:
   postgres:
     image: postgres:16-alpine
-    container_name: api-key-provider-postgres
+    container_name: api-provider-postgres
     restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
@@ -19,13 +19,13 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - api-key-provider-network
+      - api-provider-network
 
-  api-key-provider:
+  api-provider:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: api-key-provider-app
+    container_name: api-provider-app
     restart: unless-stopped
     ports:
       - "3000:3000"
@@ -39,10 +39,10 @@ services:
       postgres:
         condition: service_healthy
     networks:
-      - api-key-provider-network
+      - api-provider-network
 
 networks:
-  api-key-provider-network:
+  api-provider-network:
     driver: bridge
 
 volumes:

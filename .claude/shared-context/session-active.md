@@ -668,3 +668,49 @@ if (isTestEnvironment) {
 **Prochaines étapes suggérées** :
 - [ ] Commit et push
 - [ ] CI/CD
+
+---
+
+### main-agent - 2025-12-29 18:30
+**Tâche** : Restructuration des dossiers pour cohérence de nommage
+
+**Actions réalisées** :
+- ✅ Renommage `admin-user/` → `api-admin/` pour cohérence de nommage
+- ✅ Renommage `api-key-provider/` → `api-provider/` pour simplification
+- ✅ Mise à jour `CLAUDE.md` avec nouvelle nomenclature
+- ✅ Mise à jour `README.md` avec nouvelle structure
+- ✅ Mise à jour `.claude/settings.local.json` (configuration projet)
+- ✅ Mise à jour `docker-compose.dev.yml` et `docker-compose.production.yml` avec nouveaux paths
+- ✅ Mise à jour `scripts/build-images.sh` avec nouveaux paths
+
+**Fichiers supprimés** :
+- Ancien dossier `admin-user/` (137 fichiers)
+- Ancien dossier `api-key-provider/` (112 fichiers)
+
+**Fichiers créés** :
+- Nouveau dossier `api-admin/` (identique contenu)
+- Nouveau dossier `api-provider/` (identique contenu)
+
+**Fichiers modifiés** :
+- `.claude/settings.local.json` - Configuration mise à jour
+- `CLAUDE.md` - Documentation complète avec nouveaux noms
+- `README.md` - Instructions mises à jour
+- `docker-compose.dev.yml` - Paths corrigés
+- `docker-compose.production.yml` - Paths corrigés
+- `scripts/build-images.sh` - Chemins d'images mis à jour
+
+**Nouvelle nomenclature** :
+| Ancien nom | Nouveau nom | Raison |
+|------------|-------------|--------|
+| `admin-user/` | `api-admin/` | Cohérence avec préfixe `api-*` |
+| `api-key-provider/` | `api-provider/` | Simplification (moins verbeux) |
+
+**Impact** :
+- ✅ Nomenclature cohérente pour tous les composants (`api-*`)
+- ✅ Structure plus claire et intuitive
+- ✅ Docker Compose et scripts de build mis à jour
+- ✅ Documentation complètement à jour
+
+**État de la branche** :
+- Branche active : `feat/finalize-features`
+- Modifications prêtes pour commit

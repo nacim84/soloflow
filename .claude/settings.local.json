@@ -21,7 +21,16 @@
       "Bash(netstat:*)",
       "Bash(findstr:*)",
       "Bash(timeout 60 bash:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(docker stop:*)",
+      "Bash(docker rm:*)",
+      "Bash(./mvnw spring-boot:run:*)",
+      "Bash(npm run dev:*)",
+      "Bash(timeout 30 bash:*)",
+      "Bash(timeout 20 bash:*)",
+      "Bash(mvn spring-boot:run:*)",
+      "Bash(docker run:*)",
+      "Bash(mv:*)"
     ]
   }
 }
