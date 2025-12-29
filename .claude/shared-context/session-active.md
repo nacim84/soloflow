@@ -714,3 +714,21 @@ if (isTestEnvironment) {
 **État de la branche** :
 - Branche active : `feat/finalize-features`
 - Modifications prêtes pour commit
+
+**Commit créé et pushé** :
+- Hash : `7e83f22`
+- Message : "refactor: restructure project folders for consistent naming"
+- Fichiers : 159 modifiés (110 insertions, 55 suppressions)
+- Statut : ✅ Pushé vers origin/feat/finalize-features
+- Git status : ✅ Working tree clean
+
+**Résumé des changements** :
+- 249 fichiers renommés (admin-user → api-admin, api-key-provider → api-provider)
+- Docker Compose files mis à jour
+- Scripts de build mis à jour
+- Documentation complète mise à jour (CLAUDE.md, README.md)
+- Configuration .claude/ synchronisée
+- Shared context mis à jour
+
+**État final** :
+✅ TERMINÉ - Restructuration complète et documentation à jour
