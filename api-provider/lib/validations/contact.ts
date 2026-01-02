@@ -7,9 +7,7 @@ export const contactSchema = z.object({
   email: z.string().email({
     message: "Please enter a valid email address.",
   }),
-  subject: z.enum(["bug", "feature", "improvement", "other"], {
-    required_error: "Please select a subject.",
-  }),
+  subject: z.enum(["bug", "feature", "improvement", "other"]),
   message: z.string().min(10, {
     message: "Message must be at least 10 characters.",
   }).max(1000, {

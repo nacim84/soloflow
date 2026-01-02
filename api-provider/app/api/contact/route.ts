@@ -11,6 +11,7 @@ export async function POST(req: Request) {
     const body = contactSchema.parse(json);
 
     const toEmail = process.env.SUPPORT_EMAIL || "support@soloflow.com";
+    console.log(`[Contact API] Sending email to: ${toEmail}`);
 
     const { data, error } = await resend.emails.send({
       from: "SoloFlow Contact <onboarding@resend.dev>",
@@ -21,14 +22,19 @@ export async function POST(req: Request) {
     });
 
     if (error) {
+      console.error("[Contact API] Resend Error:", error);
       return NextResponse.json({ error }, { status: 500 });
     }
 
+    console.log("[Contact API] Email sent successfully:", data);
     return NextResponse.json({ data });
   } catch (error) {
+    console.error("[Contact API] Unexpected Error:", error);
+    if (error instanceof Error) {
     if (error instanceof Error) {
         return NextResponse.json({ error: error.message }, { status: 400 });
     }
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
+}
 }

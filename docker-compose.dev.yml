@@ -123,9 +123,9 @@ services:
       - QSTASH_URL=${QSTASH_URL}
       - QSTASH_TOKEN=${QSTASH_TOKEN}
       - QSTASH_CURRENT_SIGNING_KEY=${QSTASH_CURRENT_SIGNING_KEY}
-      - QSTASH_NEXT_SIGNING_KEY=${QSTASH_NEXT_SIGNING_KEY}
       # Email Service
       - RESEND_API_KEY=${RESEND_API_KEY}
+      - SUPPORT_EMAIL=${SUPPORT_EMAIL}
     depends_on:
       database:
         condition: service_healthy
