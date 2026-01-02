@@ -23,6 +23,8 @@ const geistMono = Geist_Mono({
 
 const locales = ['fr', 'en'];
 
+import { FloatingContactButton } from "@/components/contact/floating-contact-button";
+
 export async function generateMetadata({
   params
 }: {
@@ -79,6 +81,7 @@ export default async function LocaleLayout({
             <SessionProvider session={sessionUser}>
               <Navbar />
               {children}
+              <FloatingContactButton />
             </SessionProvider>
             <Toaster
               position="top-right"

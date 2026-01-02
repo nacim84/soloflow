@@ -12,7 +12,33 @@
     "login": "Connexion",
     "register": "S'inscrire",
     "signUp": "S'inscrire",
+    "contact": "Contact",
     "navigation": "Navigation"
+  },
+  "contact": {
+    "title": "Nous Contacter",
+    "subtitle": "Une question, un retour ou besoin d'aide ? Nous sommes là pour vous.",
+    "floatingLabel": "Contact & Support",
+    "form": {
+      "name": "Nom",
+      "namePlaceholder": "Votre nom",
+      "email": "Email",
+      "emailPlaceholder": "nom@exemple.com",
+      "subject": "Sujet",
+      "subjectPlaceholder": "Sélectionnez un sujet",
+      "message": "Message",
+      "messagePlaceholder": "Comment pouvons-nous vous aider ?",
+      "submit": "Envoyer le message",
+      "submitting": "Envoi...",
+      "success": "Message envoyé avec succès !",
+      "error": "Échec de l'envoi. Veuillez réessayer."
+    },
+    "subjects": {
+      "bug": "Signaler un Bug",
+      "feature": "Demande de Fonctionnalité",
+      "improvement": "Suggestion d'Amélioration",
+      "other": "Autre Demande"
+    }
   },
   "hero": {
     "title": "Construisez plus vite avec notre",

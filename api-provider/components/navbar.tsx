@@ -30,6 +30,7 @@ export function Navbar() {
 
   const navLinks = [
     { href: "/#pricing", label: t('pricing'), authRequired: false },
+    { href: "/contact", label: t('contact'), authRequired: false },
     { href: "/keys", label: t('myKeys'), authRequired: true },
     { href: "/services", label: t('services'), authRequired: true },
     { href: "/usage", label: t('usage'), authRequired: true },
