@@ -30,7 +30,9 @@
       "Bash(timeout 20 bash:*)",
       "Bash(mvn spring-boot:run:*)",
       "Bash(docker run:*)",
-      "Bash(mv:*)"
+      "Bash(mv:*)",
+      "Bash(npm install:*)",
+      "Bash(mkdir:*)"
     ]
   }
 }
