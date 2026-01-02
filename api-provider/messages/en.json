@@ -1,0 +1,224 @@
+{
+  "metadata": {
+    "title": "Key API Manager",
+    "description": "API key manager with credit system"
+  },
+  "navbar": {
+    "appName": "Key API Manager",
+    "pricing": "Pricing",
+    "myKeys": "My Keys",
+    "services": "Services",
+    "usage": "Usage",
+    "login": "Login",
+    "register": "Register",
+    "signUp": "Sign up",
+    "navigation": "Navigation"
+  },
+  "hero": {
+    "title": "Build faster with our",
+    "titleHighlight": "Unified API Suite",
+    "subtitle": "The developer-first platform for",
+    "subtitlePdf": "PDF Manipulation",
+    "subtitleOcr": "AI OCR",
+    "subtitleMileage": "Mileage Expenses",
+    "description": ". Generate keys, manage credits, and integrate in minutes.",
+    "ctaPrimary": "Start Building for Free",
+    "ctaSecondary": "See Features",
+    "dashboardUrl": "dashboard.keyapi.com",
+    "systemsOperational": "Systems Operational",
+    "apiRequests": "API Requests",
+    "last24Hours": "Last 24 hours",
+    "creditBalance": "Credit Balance",
+    "credits": "cr",
+    "autoRefillEnabled": "Auto-refill enabled below 100 cr",
+    "activeApiKeys": "Active API Keys",
+    "active": "Active",
+    "test": "Test"
+  },
+  "features": {
+    "title": "Everything you need to",
+    "titleHighlight": "Ship Production-Ready Features",
+    "subtitle": "A robust infrastructure handling security, billing, and scalability so you can focus on your code.",
+    "multipleServices": {
+      "title": "Multiple Services, One Key",
+      "description": "Access PDF Tools, Document Intelligence, and Mileage Generators via a single unified API.",
+      "pdf": "PDF",
+      "ocr": "OCR",
+      "data": "DATA"
+    },
+    "security": {
+      "title": "Enterprise-Grade Security",
+      "description": "Keys are hashed using SHA-256. Granular scopes allow you to restrict keys to specific services.",
+      "hashedAndSalted": "HASHED & SALTED",
+      "encryptedStorage": "Encrypted Storage"
+    },
+    "realTime": {
+      "title": "Real-Time Usage & Cost",
+      "description": "Monitor your credit consumption and API latency down to the millisecond."
+    },
+    "logs": {
+      "title": "Live API Logs",
+      "description": "Inspect requests and debug issues instantly.",
+      "ok": "OK",
+      "payment": "Payment"
+    }
+  },
+  "pricing": {
+    "title": "Simple, Usage-Based Pricing",
+    "subtitle": "Start free, buy credits when you need them. Credits valid for 1 year.",
+    "developer": {
+      "name": "Developer",
+      "price": "0€",
+      "description": "Forever free sandbox access",
+      "cta": "Get API Key",
+      "features": {
+        "credits": "100 Free Credits / mo",
+        "rateLimit": "Rate limit: 60 req/min",
+        "support": "Community Support"
+      }
+    },
+    "startup": {
+      "name": "Startup Pack",
+      "price": "5,99€",
+      "description": "5 000 Credits (Valid 1 year)",
+      "badge": "Most Popular",
+      "cta": "Buy Credits",
+      "ctaLoading": "Loading...",
+      "features": {
+        "pdfMerges": "~1000 PDF Merges",
+        "ocrPages": "~500 OCR Pages",
+        "autoRefill": "Auto-refill option",
+        "support": "Priority Email Support"
+      }
+    },
+    "scale": {
+      "name": "Scale",
+      "price": "9,99€",
+      "description": "25 000 Credits + Volume discount",
+      "cta": "Buy Credits",
+      "ctaLoading": "Loading...",
+      "features": {
+        "costPerCall": "Cheapest cost per call",
+        "slack": "Dedicated Slack Channel",
+        "rateLimit": "Higher Rate Limits",
+        "sla": "SLA 99.9%"
+      }
+    },
+    "trust": {
+      "securePayment": "Secure payment via Stripe",
+      "instantActivation": "Instant credit activation"
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "subtitle": "Everything you need to know about credits and billing",
+      "howCreditsWork": {
+        "question": "How do credits work?",
+        "answer": "Credits are prepaid and valid for 1 year from purchase. Each API call deducts credits based on the service used (e.g., PDF merge = 5 credits, OCR = 10 credits). Check your dashboard to track consumption in real-time."
+      },
+      "buyMore": {
+        "question": "Can I buy more credits later?",
+        "answer": "Yes! You can purchase additional credit packs anytime. Unused credits roll over and remain valid until their expiration date (1 year from purchase). You can also enable auto-refill to prevent service interruptions."
+      },
+      "runOut": {
+        "question": "What happens when I run out of credits?",
+        "answer": "When your credit balance reaches zero, API calls will return a 402 Payment Required error. Simply purchase a new credit pack to resume service immediately. We recommend enabling notifications to get alerts when credits are low."
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome back",
+      "subtitle": "Enter your email to sign in to your account",
+      "email": "Email",
+      "emailPlaceholder": "name@example.com",
+      "password": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "forgotPassword": "Forgot password?",
+      "signIn": "Sign In with Email",
+      "signingIn": "Signing in...",
+      "orContinueWith": "Or continue with",
+      "google": "Google",
+      "github": "Github",
+      "noAccount": "Don't have an account?",
+      "signUpLink": "Sign up",
+      "authFailed": "Authentication failed. Please try again.",
+      "invalidCredentials": "Invalid email or password",
+      "errorOccurred": "An error occurred. Please try again."
+    },
+    "register": {
+      "title": "Create an account",
+      "subtitle": "Enter your information to get started",
+      "name": "Name",
+      "namePlaceholder": "John Doe",
+      "email": "Email",
+      "emailPlaceholder": "name@example.com",
+      "password": "Password",
+      "passwordPlaceholder": "Create a secure password",
+      "confirmPassword": "Confirm Password",
+      "confirmPasswordPlaceholder": "Confirm your password",
+      "signUp": "Create Account",
+      "signingUp": "Creating...",
+      "orContinueWith": "Or continue with",
+      "google": "Google",
+      "github": "Github",
+      "hasAccount": "Already have an account?",
+      "signInLink": "Sign in",
+      "termsAgree": "By creating an account, you agree to our",
+      "termsOfService": "Terms of Service",
+      "and": "and",
+      "privacyPolicy": "Privacy Policy"
+    },
+    "forgotPassword": {
+      "title": "Forgot password",
+      "subtitle": "Enter your email to reset your password",
+      "email": "Email",
+      "emailPlaceholder": "name@example.com",
+      "sendResetLink": "Send reset link",
+      "sending": "Sending...",
+      "backToLogin": "Back to login"
+    }
+  },
+  "credits": {
+    "balance": "Balance",
+    "credits": "credits",
+    "loading": "..."
+  },
+  "user": {
+    "menu": {
+      "profile": "Profile",
+      "settings": "Settings",
+      "signOut": "Sign out"
+    }
+  },
+  "keys": {
+    "title": "API Keys - Key Ops",
+    "description": "Manage your API keys for your organization",
+    "errorLoading": "Error loading API keys.",
+    "noData": "No data available.",
+    "errorCreatingOrg": "Error creating your organization.",
+    "contactSupport": "Please contact support.",
+    "cannotLoadOrg": "Unable to load your organization."
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "search": "Search",
+    "filter": "Filter",
+    "export": "Export",
+    "import": "Import",
+    "close": "Close",
+    "open": "Open",
+    "yes": "Yes",
+    "no": "No",
+    "confirm": "Confirm"
+  }
+}

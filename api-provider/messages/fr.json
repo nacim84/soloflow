@@ -1,0 +1,224 @@
+{
+  "metadata": {
+    "title": "Key API Manager",
+    "description": "Gestionnaire de clés API avec système de crédits"
+  },
+  "navbar": {
+    "appName": "Key API Manager",
+    "pricing": "Tarifs",
+    "myKeys": "Mes Clés",
+    "services": "Services",
+    "usage": "Utilisation",
+    "login": "Connexion",
+    "register": "S'inscrire",
+    "signUp": "S'inscrire",
+    "navigation": "Navigation"
+  },
+  "hero": {
+    "title": "Construisez plus vite avec notre",
+    "titleHighlight": "Suite API Unifiée",
+    "subtitle": "La plateforme pour développeurs pour",
+    "subtitlePdf": "Manipulation PDF",
+    "subtitleOcr": "AI OCR",
+    "subtitleMileage": "Frais de Déplacement",
+    "description": ". Générez des clés, gérez vos crédits, et intégrez en quelques minutes.",
+    "ctaPrimary": "Commencer Gratuitement",
+    "ctaSecondary": "Voir les Fonctionnalités",
+    "dashboardUrl": "dashboard.keyapi.com",
+    "systemsOperational": "Systèmes Opérationnels",
+    "apiRequests": "Requêtes API",
+    "last24Hours": "Dernières 24 heures",
+    "creditBalance": "Solde de Crédits",
+    "credits": "cr",
+    "autoRefillEnabled": "Rechargement automatique activé sous 100 cr",
+    "activeApiKeys": "Clés API Actives",
+    "active": "Actif",
+    "test": "Test"
+  },
+  "features": {
+    "title": "Tout ce dont vous avez besoin pour",
+    "titleHighlight": "Livrer des Fonctionnalités Prêtes pour la Production",
+    "subtitle": "Une infrastructure robuste gérant la sécurité, la facturation et l'évolutivité pour que vous puissiez vous concentrer sur votre code.",
+    "multipleServices": {
+      "title": "Plusieurs Services, Une Clé",
+      "description": "Accédez aux Outils PDF, à l'Intelligence Documentaire et aux Générateurs de Frais de Déplacement via une API unifiée.",
+      "pdf": "PDF",
+      "ocr": "OCR",
+      "data": "DATA"
+    },
+    "security": {
+      "title": "Sécurité de Niveau Entreprise",
+      "description": "Les clés sont hachées avec SHA-256. Les scopes granulaires vous permettent de restreindre les clés à des services spécifiques.",
+      "hashedAndSalted": "HACHÉ & SALÉ",
+      "encryptedStorage": "Stockage Chiffré"
+    },
+    "realTime": {
+      "title": "Utilisation & Coût en Temps Réel",
+      "description": "Surveillez votre consommation de crédits et la latence API à la milliseconde près."
+    },
+    "logs": {
+      "title": "Logs API en Direct",
+      "description": "Inspectez les requêtes et déboguez instantanément.",
+      "ok": "OK",
+      "payment": "Payment"
+    }
+  },
+  "pricing": {
+    "title": "Tarification Simple Basée sur l'Utilisation",
+    "subtitle": "Commencez gratuitement, achetez des crédits quand vous en avez besoin. Crédits valides pendant 1 an.",
+    "developer": {
+      "name": "Developer",
+      "price": "0€",
+      "description": "Accès sandbox gratuit pour toujours",
+      "cta": "Obtenir une Clé API",
+      "features": {
+        "credits": "100 Crédits Gratuits / mois",
+        "rateLimit": "Limite : 60 req/min",
+        "support": "Support Communautaire"
+      }
+    },
+    "startup": {
+      "name": "Startup Pack",
+      "price": "5,99€",
+      "description": "5 000 Crédits (Valides 1 an)",
+      "badge": "Le Plus Populaire",
+      "cta": "Acheter des Crédits",
+      "ctaLoading": "Chargement...",
+      "features": {
+        "pdfMerges": "~1000 Fusions PDF",
+        "ocrPages": "~500 Pages OCR",
+        "autoRefill": "Option de rechargement auto",
+        "support": "Support Email Prioritaire"
+      }
+    },
+    "scale": {
+      "name": "Scale",
+      "price": "9,99€",
+      "description": "25 000 Crédits + Remise volume",
+      "cta": "Acheter des Crédits",
+      "ctaLoading": "Chargement...",
+      "features": {
+        "costPerCall": "Coût par appel le plus bas",
+        "slack": "Canal Slack Dédié",
+        "rateLimit": "Limites de Débit Plus Élevées",
+        "sla": "SLA 99,9%"
+      }
+    },
+    "trust": {
+      "securePayment": "Paiement sécurisé via Stripe",
+      "instantActivation": "Activation instantanée des crédits"
+    },
+    "faq": {
+      "title": "Questions Fréquemment Posées",
+      "subtitle": "Tout ce que vous devez savoir sur les crédits et la facturation",
+      "howCreditsWork": {
+        "question": "Comment fonctionnent les crédits ?",
+        "answer": "Les crédits sont prépayés et valides pendant 1 an à partir de l'achat. Chaque appel API déduit des crédits en fonction du service utilisé (ex : fusion PDF = 5 crédits, OCR = 10 crédits). Consultez votre tableau de bord pour suivre la consommation en temps réel."
+      },
+      "buyMore": {
+        "question": "Puis-je acheter plus de crédits plus tard ?",
+        "answer": "Oui ! Vous pouvez acheter des packs de crédits supplémentaires à tout moment. Les crédits non utilisés sont reportés et restent valides jusqu'à leur date d'expiration (1 an à partir de l'achat). Vous pouvez également activer le rechargement automatique pour éviter les interruptions de service."
+      },
+      "runOut": {
+        "question": "Que se passe-t-il quand je n'ai plus de crédits ?",
+        "answer": "Lorsque votre solde de crédits atteint zéro, les appels API renverront une erreur 402 Payment Required. Achetez simplement un nouveau pack de crédits pour reprendre le service immédiatement. Nous vous recommandons d'activer les notifications pour être alerté lorsque les crédits sont faibles."
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Bon retour",
+      "subtitle": "Entrez votre email pour vous connecter à votre compte",
+      "email": "Email",
+      "emailPlaceholder": "nom@exemple.com",
+      "password": "Mot de passe",
+      "passwordPlaceholder": "Entrez votre mot de passe",
+      "forgotPassword": "Mot de passe oublié ?",
+      "signIn": "Se Connecter avec Email",
+      "signingIn": "Connexion...",
+      "orContinueWith": "Ou continuer avec",
+      "google": "Google",
+      "github": "Github",
+      "noAccount": "Vous n'avez pas de compte ?",
+      "signUpLink": "S'inscrire",
+      "authFailed": "Échec de l'authentification. Veuillez réessayer.",
+      "invalidCredentials": "Email ou mot de passe incorrect",
+      "errorOccurred": "Une erreur est survenue. Veuillez réessayer."
+    },
+    "register": {
+      "title": "Créer un compte",
+      "subtitle": "Entrez vos informations pour commencer",
+      "name": "Nom",
+      "namePlaceholder": "Jean Dupont",
+      "email": "Email",
+      "emailPlaceholder": "nom@exemple.com",
+      "password": "Mot de passe",
+      "passwordPlaceholder": "Créez un mot de passe sécurisé",
+      "confirmPassword": "Confirmer le mot de passe",
+      "confirmPasswordPlaceholder": "Confirmez votre mot de passe",
+      "signUp": "Créer un compte",
+      "signingUp": "Création...",
+      "orContinueWith": "Ou continuer avec",
+      "google": "Google",
+      "github": "Github",
+      "hasAccount": "Vous avez déjà un compte ?",
+      "signInLink": "Se connecter",
+      "termsAgree": "En créant un compte, vous acceptez nos",
+      "termsOfService": "Conditions d'Utilisation",
+      "and": "et notre",
+      "privacyPolicy": "Politique de Confidentialité"
+    },
+    "forgotPassword": {
+      "title": "Mot de passe oublié",
+      "subtitle": "Entrez votre email pour réinitialiser votre mot de passe",
+      "email": "Email",
+      "emailPlaceholder": "nom@exemple.com",
+      "sendResetLink": "Envoyer le lien de réinitialisation",
+      "sending": "Envoi...",
+      "backToLogin": "Retour à la connexion"
+    }
+  },
+  "credits": {
+    "balance": "Solde",
+    "credits": "crédits",
+    "loading": "..."
+  },
+  "user": {
+    "menu": {
+      "profile": "Profil",
+      "settings": "Paramètres",
+      "signOut": "Se déconnecter"
+    }
+  },
+  "keys": {
+    "title": "Clés API - Key Ops",
+    "description": "Gérez vos clés API pour votre organisation",
+    "errorLoading": "Erreur lors de la récupération des clés API.",
+    "noData": "Aucune donnée disponible.",
+    "errorCreatingOrg": "Erreur lors de la création de votre organisation.",
+    "contactSupport": "Veuillez contacter le support.",
+    "cannotLoadOrg": "Impossible de charger votre organisation."
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "create": "Créer",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "export": "Exporter",
+    "import": "Importer",
+    "close": "Fermer",
+    "open": "Ouvrir",
+    "yes": "Oui",
+    "no": "Non",
+    "confirm": "Confirmer"
+  }
+}

@@ -14,23 +14,26 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { LanguageSelector } from "@/components/language-selector";
 import { UserMenu } from "@/components/user-menu";
 import { CreditsBadge } from "@/components/credits-badge";
 import { cn } from "@/lib/utils";
-
-const navLinks = [
-  { href: "/#pricing", label: "Pricing", authRequired: false },
-  { href: "/keys", label: "My Keys", authRequired: true },
-  { href: "/services", label: "Services", authRequired: true },
-  { href: "/usage", label: "Usage", authRequired: true },
-];
+import { useTranslations } from "next-intl";
 
 export function Navbar() {
   const pathname = usePathname();
   const { user } = useServerSession();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const t = useTranslations('navbar');
 
   const isAuthenticated = !!user;
+
+  const navLinks = [
+    { href: "/#pricing", label: t('pricing'), authRequired: false },
+    { href: "/keys", label: t('myKeys'), authRequired: true },
+    { href: "/services", label: t('services'), authRequired: true },
+    { href: "/usage", label: t('usage'), authRequired: true },
+  ];
 
   const visibleLinks = navLinks.filter(
     (link) => !link.authRequired || isAuthenticated,
@@ -55,7 +58,7 @@ export function Navbar() {
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-sm">
               <KeyRound className="h-5 w-5" />
             </div>
-            <span className="hidden sm:inline-block">Key API Manager</span>
+            <span className="hidden sm:inline-block">{t('appName')}</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -79,15 +82,21 @@ export function Navbar() {
 
         {/* Actions */}
         <div className="flex items-center gap-3">
+          {/* Language Selector */}
+          <LanguageSelector />
+
+          {/* Divider (Desktop only) */}
+          <div className="hidden h-6 w-px bg-zinc-200 dark:bg-zinc-800 md:block" />
+
+          <ThemeToggle />
+
           {/* Credits Badge (only if authenticated) */}
           {isAuthenticated && (
             <>
-              <CreditsBadge />
               <div className="hidden h-6 w-px bg-zinc-200 dark:bg-zinc-800 md:block" />
+              <CreditsBadge />
             </>
           )}
-
-          <ThemeToggle />
 
           {/* Divider (Desktop only) */}
           <div className="hidden h-6 w-px bg-zinc-200 dark:bg-zinc-800 md:block" />
@@ -98,10 +107,10 @@ export function Navbar() {
           ) : (
             <div className="hidden items-center gap-2 md:flex">
               <Button variant="ghost" size="sm" asChild>
-                <Link href="/login">Login</Link>
+                <Link href="/login">{t('login')}</Link>
               </Button>
               <Button size="sm" asChild className="shadow-lg">
-                <Link href="/register">Sign up</Link>
+                <Link href="/register">{t('signUp')}</Link>
               </Button>
             </div>
           )}
@@ -124,7 +133,7 @@ export function Navbar() {
             </SheetTrigger>
             <SheetContent side="right" className="w-3/4 max-w-[300px] sm:w-[300px] pr-0">
               <SheetHeader className="sr-only">
-                <SheetTitle>Navigation</SheetTitle>
+                <SheetTitle>{t('navigation')}</SheetTitle>
               </SheetHeader>
               <div className="mt-8 flex flex-col gap-6 px-1">
                 {/* Mobile Nav Links */}
@@ -154,7 +163,7 @@ export function Navbar() {
                         href="/login"
                         onClick={() => setMobileMenuOpen(false)}
                       >
-                        Login
+                        {t('login')}
                       </Link>
                     </Button>
                     <Button asChild className="w-full justify-start shadow-lg bg-zinc-900 text-white hover:bg-zinc-800 dark:bg-white dark:text-black">
@@ -162,7 +171,7 @@ export function Navbar() {
                         href="/register"
                         onClick={() => setMobileMenuOpen(false)}
                       >
-                        Sign up
+                        {t('signUp')}
                       </Link>
                     </Button>
                   </div>
