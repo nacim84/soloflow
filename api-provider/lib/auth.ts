@@ -44,7 +44,7 @@ export const auth = betterAuth({
     requireEmailVerification: process.env.NODE_ENV === "production",
     autoSignIn: process.env.NODE_ENV === "development",
 
-    sendVerificationEmail: async ({ user, url, token }) => {
+    sendVerificationEmail: async ({ user, url, token }: { user: any; url: string; token: string }) => {
       // Queue email de vérification
       try {
         await queueEmail({

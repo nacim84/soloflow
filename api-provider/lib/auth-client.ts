@@ -13,5 +13,5 @@ export const {
   sendVerificationEmail,
 } = authClient;
 
-// Force export forgetPassword avoiding TS inference issues
-export const forgetPassword = authClient.forgetPassword;
+// Better Auth uses requestPasswordReset (not forgetPassword) for email/password auth
+export const forgetPassword = authClient.requestPasswordReset;
