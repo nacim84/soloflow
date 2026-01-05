@@ -44,9 +44,23 @@ export const auth = betterAuth({
     requireEmailVerification: process.env.NODE_ENV === "production",
     autoSignIn: process.env.NODE_ENV === "development",
 
-    // NOTE: sendVerificationEmail deprecated in Better Auth v1.4+
-    // La vérification d'email se fait maintenant via les hooks
-    // TODO: Migrer vers le système de hooks Better Auth si nécessaire
+    sendVerificationEmail: async ({ user, url, token }) => {
+      // Queue email de vérification
+      try {
+        await queueEmail({
+          type: "verification",
+          to: user.email,
+          url,
+          token,
+        });
+      } catch (error) {
+        console.error("Failed to queue verification email:", error);
+        // En dev, continuer quand même
+        if (process.env.NODE_ENV !== "development") {
+          throw error;
+        }
+      }
+    },
 
     sendResetPassword: async ({ user, url, token }) => {
       // Revoke ALL old reset tokens (critical security)

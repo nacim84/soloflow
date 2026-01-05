@@ -23,7 +23,7 @@ import {
   CheckCircle,
   ArrowLeft,
 } from "lucide-react";
-import { sendVerificationEmail } from "@/lib/auth-client";
+import { forgetPassword } from "@/lib/auth-client";
 import {
   forgotPasswordSchema,
   type ForgotPasswordFormData,
@@ -49,8 +49,9 @@ export default function ForgotPasswordPage() {
     setEmail(data.email);
 
     try {
-      await sendVerificationEmail({
+      await forgetPassword({
         email: data.email,
+        redirectTo: "/reset-password",
       });
 
       setSuccess(true);
