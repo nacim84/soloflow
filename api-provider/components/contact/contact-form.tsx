@@ -74,40 +74,42 @@ export function ContactForm({ onSuccess, className }: ContactFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className={cn("space-y-6", className)}>
+    <form onSubmit={handleSubmit(onSubmit)} className={cn("grid gap-4", className)}>
       <div className="grid gap-4 md:grid-cols-2">
-        <div className="space-y-2">
+        <div className="grid gap-2">
           <Label htmlFor="name">{t("form.name")}</Label>
           <Input
             id="name"
             placeholder={t("form.namePlaceholder")}
+            className="h-11 bg-zinc-50 dark:bg-zinc-900/50 border-zinc-200 dark:border-zinc-800"
             {...register("name")}
           />
           {errors.name && (
-            <p className="text-sm font-medium text-red-500">{errors.name.message}</p>
+            <p className="text-sm text-red-600 dark:text-red-400">{errors.name.message}</p>
           )}
         </div>
-        <div className="space-y-2">
+        <div className="grid gap-2">
           <Label htmlFor="email">{t("form.email")}</Label>
           <Input
             id="email"
             placeholder={t("form.emailPlaceholder")}
+            className="h-11 bg-zinc-50 dark:bg-zinc-900/50 border-zinc-200 dark:border-zinc-800"
             {...register("email")}
           />
           {errors.email && (
-            <p className="text-sm font-medium text-red-500">{errors.email.message}</p>
+            <p className="text-sm text-red-600 dark:text-red-400">{errors.email.message}</p>
           )}
         </div>
       </div>
 
-      <div className="space-y-2">
+      <div className="grid gap-2">
         <Label htmlFor="subject">{t("form.subject")}</Label>
         <Controller
           control={control}
           name="subject"
           render={({ field }) => (
             <Select onValueChange={field.onChange} defaultValue={field.value}>
-              <SelectTrigger id="subject">
+              <SelectTrigger id="subject" className="h-11 bg-zinc-50 dark:bg-zinc-900/50 border-zinc-200 dark:border-zinc-800">
                 <SelectValue placeholder={t("form.subjectPlaceholder")} />
               </SelectTrigger>
               <SelectContent>
@@ -140,24 +142,28 @@ export function ContactForm({ onSuccess, className }: ContactFormProps) {
           )}
         />
         {errors.subject && (
-          <p className="text-sm font-medium text-red-500">{errors.subject.message}</p>
+          <p className="text-sm text-red-600 dark:text-red-400">{errors.subject.message}</p>
         )}
       </div>
 
-      <div className="space-y-2">
+      <div className="grid gap-2">
         <Label htmlFor="message">{t("form.message")}</Label>
         <Textarea
           id="message"
           placeholder={t("form.messagePlaceholder")}
-          className="min-h-[120px]"
+          className="min-h-[120px] bg-zinc-50 dark:bg-zinc-900/50 border-zinc-200 dark:border-zinc-800"
           {...register("message")}
         />
         {errors.message && (
-          <p className="text-sm font-medium text-red-500">{errors.message.message}</p>
+          <p className="text-sm text-red-600 dark:text-red-400">{errors.message.message}</p>
         )}
       </div>
 
-      <Button type="submit" className="w-full" disabled={isSubmitting}>
+      <Button
+        type="submit"
+        className="w-full h-11 bg-zinc-900 text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200 transition-all font-semibold"
+        disabled={isSubmitting}
+      >
         {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
         {isSubmitting ? t("form.submitting") : t("form.submit")}
       </Button>
