@@ -11,6 +11,9 @@ export interface SendEmailOptions {
 
 export async function sendEmail({ to, subject, react }: SendEmailOptions) {
   try {
+    console.log(`[Email Service] Sending email to: ${to}`);
+    console.log(`[Email Service] Subject: ${subject}`);
+
     const { data, error } = await resend.emails.send({
       from: process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev',
       to,
@@ -19,13 +22,14 @@ export async function sendEmail({ to, subject, react }: SendEmailOptions) {
     });
 
     if (error) {
-      console.error('Email send failed:', error);
+      console.error('[Email Service] Resend Error:', error);
       throw new Error('Failed to send email');
     }
 
+    console.log('[Email Service] Email sent successfully:', data);
     return data;
   } catch (error) {
-    console.error('Email service error:', error);
+    console.error('[Email Service] Unexpected Error:', error);
     throw error;
   }
 }

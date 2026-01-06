@@ -63,9 +63,14 @@ export async function queueEmail(job: EmailJob) {
     await qstash.publishJSON({
       url: `${baseUrl}/api/jobs/send-email`,
       body: job,
+      // Add Authorization header for endpoint security
+      headers: {
+        'Authorization': `Bearer ${process.env.CRON_SECRET}`,
+      },
     });
+    console.log('✅ Email queued successfully via QStash');
   } catch (error) {
-    console.error('Error queueing email:', error);
+    console.error('❌ Error queueing email via QStash:', error);
     // Log mais ne pas lever l'erreur en dev
     if (process.env.NODE_ENV === 'development') {
       console.warn('⚠️ Email queue failed in dev mode, continuing anyway');
