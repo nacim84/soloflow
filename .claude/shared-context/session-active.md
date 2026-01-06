@@ -41,6 +41,35 @@ Reprendre le projet SoloFlow avec la nouvelle gestion du contexte partagé. Éva
 
 ## 📝 Travail Effectué
 
+### main-agent - 2026-01-06 11:40
+**Tâche** : Oneshot - Modifier le plan Developer pour qu'il soit payant à 2.99€
+
+**Actions réalisées** :
+- ✅ Ajout du plan "developer" dans CREDIT_PLANS (app/api/stripe/create-checkout/route.ts)
+  - 500 crédits pour 2.99€
+  - STRIPE_PRICE_DEVELOPPER_PLAN déjà configuré
+- ✅ Modification de la pricing section (components/landing/pricing-section.tsx)
+  - Prix : 0€ → 2.99€
+  - Description : "Forever free sandbox" → "500 Credits (Valid 1 year)"
+  - Bouton : "Get API Key" → "Buy Credits" avec onClick handler
+  - Features : ~100 PDF Merges, ~50 OCR Pages, Community Support
+
+**Fichiers modifiés** :
+- `app/api/stripe/create-checkout/route.ts` - Ajout plan developer dans CREDIT_PLANS
+- `components/landing/pricing-section.tsx` - UI mise à jour pour plan payant
+
+**Décisions prises** :
+- 🎯 Plan Developer n'est plus gratuit, devient un plan d'entrée de gamme à 2.99€
+- 🎯 Tous les plans utilisent maintenant Stripe (pas de plan gratuit)
+- 🎯 500 crédits permettent ~100 PDF merges ou ~50 OCR pages
+
+**Impact** :
+- Modèle économique : Tous les utilisateurs doivent acheter des crédits
+- Simplification : Plus de distinction "free tier" vs "paid plans"
+- Cohérence : Tous les plans suivent le même flow Stripe Checkout
+
+---
+
 ### context-manager-agent - 2025-12-19 17:45
 **Tâche** : Initialisation de la nouvelle session et archivage de la précédente
 

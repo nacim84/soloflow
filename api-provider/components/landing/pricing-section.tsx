@@ -16,7 +16,7 @@ export function PricingSection() {
   const [isLoading, setIsLoading] = useState(false);
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
 
-  const handleBuyCredits = async (planType: 'startup' | 'scale') => {
+  const handleBuyCredits = async (planType: 'developer' | 'startup' | 'scale') => {
     setIsLoading(true);
     setLoadingPlan(planType);
 
@@ -52,44 +52,52 @@ export function PricingSection() {
             Simple, Usage-Based Pricing
           </h2>
           <p className="text-zinc-500 dark:text-zinc-400 max-w-xl mx-auto">
-            Start free, buy credits when you need them. Credits valid for 1 year.
+            Buy credits when you need them. All credits valid for 1 year.
           </p>
         </div>
       </FadeIn>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto items-center">
-        {/* Starter */}
+        {/* Developer */}
         <FadeIn delay={0} direction="up" className="h-full">
           <div className="bg-white dark:bg-[#121214] border border-zinc-200 dark:border-white/10 rounded-2xl p-8 flex flex-col hover:-translate-y-2 transition-transform duration-300 shadow-sm dark:shadow-none h-full">
             <h3 className="text-indigo-600 dark:text-indigo-400 font-medium text-sm mb-2">
               Developer
             </h3>
             <div className="text-4xl font-bold mb-2 text-zinc-900 dark:text-white">
-              0€
+              2,99€
             </div>
             <p className="text-zinc-500 text-xs mb-6">
-              Forever free sandbox access
+              500 Credits (Valid 1 year)
             </p>
 
             <Button
-              asChild
               variant="outline"
               className="w-full py-2 rounded-full border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 mb-8"
+              onClick={() => handleBuyCredits('developer')}
+              disabled={isLoading}
             >
-              <Link href="/register">Get API Key</Link>
+              {isLoading && loadingPlan === 'developer' ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Loading...
+                </>
+              ) : (
+                "Buy Credits"
+              )}
             </Button>
             <ul className="space-y-4 text-sm text-zinc-600 dark:text-zinc-400">
               <li className="flex gap-2 items-center">
                 <span className="text-zinc-600 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-900 rounded-full p-1 text-[10px]">
                   ✓
                 </span>
-                100 Free Credits / mo
+                ~100 PDF Merges
               </li>
               <li className="flex gap-2 items-center">
                 <span className="text-zinc-600 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-900 rounded-full p-1 text-[10px]">
                   ✓
                 </span>
-                Rate limit: 60 req/min
+                ~50 OCR Pages
               </li>
               <li className="flex gap-2 items-center">
                 <span className="text-zinc-600 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-900 rounded-full p-1 text-[10px]">
