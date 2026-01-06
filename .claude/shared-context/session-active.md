@@ -5,12 +5,13 @@ Reprendre le projet SoloFlow avec la nouvelle gestion du contexte partagé. Éva
 
 ## 📊 État Actuel
 - **Phase**: CODE (Implémentation - Phase 2 en cours)
-- **Progression**: Phase 1 (100%) + Phase 2 (95% - Pricing finalisé + Usage page en cours)
-- **Dernière mise à jour**: 2025-12-22 11:45
-- **Branche active**: feat/finalize-features
-- **Commits pushés**: 7 (0549784 sur main, puis branche feat/finalize-features créée)
-- **Travail en cours**: Page /usage - connexion UI aux données réelles
-- **Modifications non commitées**: Pricing page + navbar + env fixes
+- **Progression**: Phase 1 (100%) + Phase 2 (98% - Pricing finalisé + Usage page finalisée + Email system complet)
+- **Dernière mise à jour**: 2026-01-07 00:30
+- **Branche active**: prod/ready_prod
+- **Commits pushés**: 8 commits (pricing, contact, auth fixes, email unification, welcome email)
+- **Dernier commit**: b9a313e - feat(email): add welcome email after successful user registration
+- **Travail en cours**: Aucun - Working tree clean
+- **Modifications non commitées**: Aucune (contexte local uniquement)
 
 ---
 
@@ -40,6 +41,173 @@ Reprendre le projet SoloFlow avec la nouvelle gestion du contexte partagé. Éva
 ---
 
 ## 📝 Travail Effectué
+
+### main-agent - 2026-01-07 00:30
+**Tâche** : Oneshot - Implémenter email de bienvenue après enregistrement
+
+**Actions réalisées** :
+- ✅ Création du template WelcomeEmail avec design cohérent (React Email)
+- ✅ Extension du type EmailJob avec variante 'welcome'
+- ✅ Ajout du handling dans send-email worker (QStash)
+- ✅ Intégration dans le flow register après création organisation
+- ✅ Build Next.js réussi (TypeScript OK)
+
+**Fichiers créés** :
+- `api-provider/emails/welcome.tsx` - Template email bienvenue
+
+**Fichiers modifiés** :
+- `api-provider/lib/queue.tsx` - EmailJob type + welcome case
+- `api-provider/app/api/jobs/send-email/route.tsx` - Welcome email handler
+- `api-provider/app/[locale]/(auth)/register/page.tsx` - queueEmail() call
+
+**Flow implémenté** :
+```typescript
+// Après signup réussi et création organisation
+await queueEmail({
+  type: "welcome",
+  to: data.email,
+  name: data.name,
+  dashboardUrl: `${window.location.origin}/keys`,
+});
+```
+
+**Commit** :
+- Hash : `b9a313e`
+- Branche : `prod/ready_prod`
+- Message : "feat(email): add welcome email after successful user registration"
+
+**Impact** :
+- ✅ Nouveaux utilisateurs reçoivent un email de bienvenue personnalisé
+- ✅ Email envoyé via QStash (asynchrone en prod, direct en dev)
+- ✅ Design cohérent avec les autres emails (verification, reset-password, contact)
+- ✅ Ne bloque pas le flow d'enregistrement en cas d'échec email
+
+---
+
+### main-agent - 2026-01-07 00:15
+**Tâche** : Commit et push des modifications mineures (formatting, i18n, contact)
+
+**Actions réalisées** :
+- ✅ Push du commit `67ae4c6` vers origin/prod/ready_prod
+- ✅ Vérification working tree clean
+
+**Commit pushé** :
+- Hash : `67ae4c6`
+- Branche : `prod/ready_prod`
+- Message : "chore: minor formatting and i18n improvements"
+
+**Fichiers inclus dans le commit** :
+- Login page formatting
+- Contact page styling
+- i18n label updates (navbar: "My Keys" → "API Keys")
+- Contact background image
+
+**Impact** :
+- ✅ Toutes les modifications de la session sont maintenant sauvegardées
+- ✅ Working tree propre, prêt pour nouvelles tâches
+- ✅ 6 commits oneshot + 1 commit final = 7 commits total sur prod/ready_prod
+
+---
+
+### main-agent - 2026-01-06 16:00
+**Tâche** : Oneshot - Fix redirection pricing dans page /usage
+
+**Actions réalisées** :
+- ✅ Modification du bouton "Recharger maintenant" pour rediriger vers `/pricing` au lieu de `/#pricing`
+- ✅ Utilisation de `router.push("/pricing")` dans le onClick handler
+- ✅ Build Next.js réussi
+
+**Fichiers modifiés** :
+- `api-provider/app/[locale]/usage/usage-client.tsx` - Fix pricing redirect
+
+**Commit** :
+- Hash : `d61a7c5`
+- Branche : `prod/ready_prod`
+- Message : "fix(usage): update pricing redirect from anchor to route"
+
+**Impact** :
+- ✅ Bouton "Recharger maintenant" redirige maintenant vers la page pricing dédiée
+- ✅ Cohérence avec la nouvelle structure de routing
+
+---
+
+### main-agent - 2026-01-06 15:00
+**Tâche** : Oneshot - Fix authentification pour achat de crédits
+
+**Actions réalisées** :
+- ✅ Ajout du hook `useServerSession` dans pricing-section.tsx
+- ✅ Vérification de l'authentification avant d'appeler `/api/stripe/create-checkout`
+- ✅ Redirection vers `/login?redirect=/pricing` si non authentifié
+- ✅ Ajout du paramètre `disabled={isLoading}` pour éviter les clics multiples
+- ✅ Build Next.js réussi
+
+**Fichiers modifiés** :
+- `api-provider/components/landing/pricing-section.tsx` - Auth check avant checkout
+
+**Logique implémentée** :
+```typescript
+const { user } = useServerSession();
+
+const handleBuyCredits = async (planType: 'developer' | 'startup' | 'scale') => {
+  if (!user) {
+    window.location.href = "/login?redirect=/pricing";
+    return;
+  }
+  // ... existing Stripe checkout logic
+}
+```
+
+**Commit** :
+- Hash : `199402c`
+- Branche : `prod/ready_prod`
+- Message : "fix(pricing): redirect to login when unauthenticated user tries to purchase"
+
+**Impact** :
+- ✅ Utilisateurs non authentifiés sont redirigés vers login au lieu de voir une erreur API
+- ✅ Expérience utilisateur améliorée avec feedback approprié
+- ✅ Redirect parameter permet de revenir sur pricing après login
+
+---
+
+### main-agent - 2026-01-06 14:00
+**Tâche** : Oneshot - Unifier système d'envoi d'emails avec QStash
+
+**Actions réalisées** :
+- ✅ Extension du type `EmailJob` pour supporter les emails de contact
+- ✅ Modification de `queueEmail()` pour gérer le type 'contact' avec template React Email
+- ✅ Mise à jour de `/api/contact/route.ts` pour utiliser `queueEmail()` au lieu de Resend direct
+- ✅ Mise à jour de `/api/jobs/send-email/route.tsx` pour traiter les emails de contact
+- ✅ Ajout du paramètre optionnel `replyTo` dans `SendEmailOptions`
+- ✅ Fix erreurs TypeScript (union type, enum subject)
+- ✅ Build Next.js réussi
+
+**Fichiers modifiés** :
+- `api-provider/lib/queue.tsx` - EmailJob discriminated union + contact case
+- `api-provider/lib/email.ts` - Optional replyTo parameter
+- `api-provider/app/api/contact/route.ts` - queueEmail() usage
+- `api-provider/app/api/jobs/send-email/route.tsx` - Contact email handler
+
+**Type EmailJob étendu** :
+```typescript
+export type EmailJob =
+  | { type: 'verification'; to: string; url: string; token: string; }
+  | { type: 'reset-password'; to: string; url: string; token: string; }
+  | { type: 'contact'; to: string; replyTo: string; name: string; email: string;
+      subject: 'bug' | 'feature' | 'improvement' | 'other'; message: string; };
+```
+
+**Commit** :
+- Hash : `1f01c6a`
+- Branche : `prod/ready_prod`
+- Message : "feat(email): unify contact email with QStash queue system"
+
+**Impact** :
+- ✅ Tous les emails (verification, reset-password, contact) utilisent maintenant la queue QStash
+- ✅ Infrastructure d'envoi d'emails unifiée et cohérente
+- ✅ Gestion asynchrone pour tous les types d'emails
+- ✅ Fallback gracieux en dev mode (envoi direct sans QStash)
+
+---
 
 ### main-agent - 2026-01-06 12:30
 **Tâche** : Oneshot - Alignement design formulaire Contact avec Login/Register
@@ -611,7 +779,7 @@ Aucun problème rencontré pour le moment.
 
 ## 🔄 Handoff Notes (pour le prochain agent)
 
-**État actuel** : Phase 1 TERMINÉE, Phase 2 (95%), Phase 3 EN COURS (25%)
+**État actuel** : Phase 1 TERMINÉE, Phase 2 (98%), Phase 3 EN COURS (25%)
 
 **Accomplissements Session** :
 - ✅ Exploration exhaustive du projet (17000+ mots de documentation)
@@ -626,38 +794,46 @@ Aucun problème rencontré pour le moment.
 - ✅ **Système de Contact multilingue** (formulaire, bouton flottant, API Resend)
 - ✅ **Navbar nettoyée** (lien Home supprimé, lien Contact ajouté)
 - ✅ **Endpoint /hello** sur api-template pour tests
+- ✅ **Email system complet** : verification, reset-password, contact, welcome (via QStash)
+- ✅ **Page /usage finalisée** : UI + connexion données réelles + logging Gateway
+- ✅ **Auth flow amélioré** : redirects, email queue, welcome email
 
-**Commits sur main** :
-1. `0549784` - feat(api-template): add /hello test endpoint
-2. `a512f0f` - Merge PR config/acer_device → main
+**Commits récents sur prod/ready_prod** :
+1. `2639d35` - enhance: move pricing section to dedicated /pricing route
+2. `c616a76` - ux: center contact form and remove left panel
+3. `0825aa0` - ux: align contact form design with login/register forms
+4. `1f01c6a` - feat(email): unify contact email with QStash queue system
+5. `199402c` - fix(pricing): redirect to login when unauthenticated user tries to purchase
+6. `d61a7c5` - fix(usage): update pricing redirect from anchor to route
+7. `67ae4c6` - chore: minor formatting and i18n improvements
+8. `b9a313e` - feat(email): add welcome email after successful user registration
 
-**Travail en cours (non commité sur feat/finalize-features)** :
-- `pricing-section.tsx` - Prix €, bouton Developer, toggle supprimé
-- `navbar.tsx` - Lien Home supprimé
-- `create-checkout/route.ts` - Plan developer supprimé
-- `.env` / `.env.local` - Clés Stripe synchronisées
+**Travail en cours** :
+- ✅ Aucun - Working tree clean
+- ✅ Tous les commits pushés vers origin/prod/ready_prod
+- ✅ Prêt pour nouvelles tâches
 
-**Prochaines Étapes** :
-1. **Commit + push** des modifications pricing/navbar
-2. **Page /usage** : Connecter UI aux données réelles
-3. **Gateway logging** : Écrire dans api_usage_logs après chaque requête
-4. **CI/CD pipeline** : Automatisation build/test/deploy
+**Prochaines Étapes suggérées** :
+1. **Merge vers main** : Créer PR prod/ready_prod → main
+2. **Tests end-to-end** : Valider flow complet (signup → welcome email → login → keys → usage)
+3. **CI/CD pipeline** : Automatisation build/test/deploy
+4. **Production deployment** : Déployer sur environnement de production
+5. **Monitoring** : Ajouter Prometheus/Grafana pour observabilité
 
-**Page /usage - État actuel** :
-| Composant | Status |
-|-----------|--------|
-| UI (stats, table, filtres) | ✅ Complète |
-| Schema DB api_usage_logs | ✅ Existe |
-| Server Actions | ⏱️ Non connectées |
-| Gateway → DB logging | ⏱️ Non implémenté |
-| Filtres temps | ⏱️ Non fonctionnels |
-| Export CSV | ⏱️ Non implémenté |
+**Système email - État complet** :
+| Type Email | Status | Template | Queue |
+|------------|--------|----------|-------|
+| Verification | ✅ Opérationnel | VerificationEmail | QStash |
+| Reset Password | ✅ Opérationnel | ResetPasswordEmail | QStash |
+| Contact | ✅ Opérationnel | ContactNotificationEmail | QStash |
+| Welcome | ✅ Opérationnel | WelcomeEmail | QStash |
 
 **Contexte git** :
-- Branche actuelle : `feat/finalize-features`
-- Base : `main` (0549784)
-- État working tree : Modifications non commitées (pricing, navbar, env)
-- Stack dev : Déployé et fonctionnel (9 containers)
+- Branche actuelle : `prod/ready_prod`
+- Dernier commit : `b9a313e` (welcome email)
+- État working tree : ✅ Clean
+- Remote : ✅ Tous commits pushés
+- Stack dev : Prêt à déployer (9 containers)
 
 ---
 
