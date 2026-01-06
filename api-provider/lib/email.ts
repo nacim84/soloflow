@@ -7,18 +7,23 @@ export interface SendEmailOptions {
   to: string;
   subject: string;
   react: React.ReactElement;
+  replyTo?: string;
 }
 
-export async function sendEmail({ to, subject, react }: SendEmailOptions) {
+export async function sendEmail({ to, subject, react, replyTo }: SendEmailOptions) {
   try {
     console.log(`[Email Service] Sending email to: ${to}`);
     console.log(`[Email Service] Subject: ${subject}`);
+    if (replyTo) {
+      console.log(`[Email Service] Reply-To: ${replyTo}`);
+    }
 
     const { data, error } = await resend.emails.send({
       from: process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev',
       to,
       subject,
       react,
+      ...(replyTo && { replyTo }),
     });
 
     if (error) {

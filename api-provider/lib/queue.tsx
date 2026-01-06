@@ -2,6 +2,7 @@ import { Client } from '@upstash/qstash';
 import { sendEmail } from "@/lib/email";
 import { VerificationEmail } from "@/emails/verification";
 import { ResetPasswordEmail } from "@/emails/reset-password";
+import ContactNotificationEmail from "@/emails/contact-notification";
 import * as React from "react";
 
 // En dev, si QSTASH_TOKEN n'est pas défini, créer un client no-op
@@ -12,12 +13,28 @@ if (process.env.QSTASH_TOKEN) {
   });
 }
 
-export interface EmailJob {
-  type: 'verification' | 'reset-password';
-  to: string;
-  url: string;
-  token: string;
-}
+export type EmailJob =
+  | {
+      type: 'verification';
+      to: string;
+      url: string;
+      token: string;
+    }
+  | {
+      type: 'reset-password';
+      to: string;
+      url: string;
+      token: string;
+    }
+  | {
+      type: 'contact';
+      to: string;
+      replyTo: string;
+      name: string;
+      email: string;
+      subject: 'bug' | 'feature' | 'improvement' | 'other';
+      message: string;
+    };
 
 export async function queueEmail(job: EmailJob) {
   // En développement sans QStash, envoyer directement l'email
@@ -29,6 +46,7 @@ export async function queueEmail(job: EmailJob) {
 
     let emailTemplate;
     let subject;
+    let replyTo: string | undefined;
 
     switch (job.type) {
       case "verification":
@@ -39,9 +57,16 @@ export async function queueEmail(job: EmailJob) {
         subject = "Reset your password";
         emailTemplate = <ResetPasswordEmail url={job.url} />;
         break;
-      default:
-        console.error("Invalid email type:", job.type);
-        return;
+      case "contact":
+        subject = `[${job.subject.toUpperCase()}] New message from ${job.name}`;
+        emailTemplate = <ContactNotificationEmail data={{
+          name: job.name,
+          email: job.email,
+          subject: job.subject,
+          message: job.message,
+        }} />;
+        replyTo = job.replyTo;
+        break;
     }
 
     try {
@@ -49,6 +74,7 @@ export async function queueEmail(job: EmailJob) {
         to: job.to,
         subject,
         react: emailTemplate,
+        ...(replyTo && { replyTo }),
       });
       console.log('✅ Email sent successfully in dev mode');
     } catch (error) {

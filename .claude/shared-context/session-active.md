@@ -41,6 +41,124 @@ Reprendre le projet SoloFlow avec la nouvelle gestion du contexte partagé. Éva
 
 ## 📝 Travail Effectué
 
+### main-agent - 2026-01-06 12:30
+**Tâche** : Oneshot - Alignement design formulaire Contact avec Login/Register
+
+**Actions réalisées** :
+- ✅ Adaptation des styles des Inputs du formulaire Contact (h-11, bg-zinc-50, border-zinc-200)
+- ✅ Adaptation du style Select (subject) pour correspondre aux formulaires d'auth
+- ✅ Adaptation du style Textarea (message) avec mêmes couleurs de fond/bordure
+- ✅ Adaptation du Button submit pour correspondre au style Login/Register (h-11, bg-zinc-900, font-semibold)
+- ✅ Ajustement des espacements (gap-4 au lieu de gap-6)
+- ✅ Changement des conteneurs de space-y-2 à grid gap-2 (cohérent avec Login/Register)
+- ✅ Standardisation des messages d'erreur (text-red-600 dark:text-red-400)
+
+**Fichiers modifiés** :
+- `api-provider/components/contact/contact-form.tsx` - Styles alignés avec Login/Register
+
+**Styles appliqués** :
+- Inputs : `h-11 bg-zinc-50 dark:bg-zinc-900/50 border-zinc-200 dark:border-zinc-800`
+- Select : `h-11 bg-zinc-50 dark:bg-zinc-900/50 border-zinc-200 dark:border-zinc-800`
+- Textarea : `bg-zinc-50 dark:bg-zinc-900/50 border-zinc-200 dark:border-zinc-800`
+- Button : `h-11 bg-zinc-900 text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200 font-semibold`
+
+**Commit** :
+- Hash : `0825aa0`
+- Branche : `prod/ready_prod`
+- Message : "ux: align contact form design with login/register forms"
+
+**Impact** :
+- Cohérence visuelle entre tous les formulaires de l'application
+- Design professionnel et uniforme
+- Expérience utilisateur améliorée
+
+---
+
+### main-agent - 2026-01-06 12:20
+**Tâche** : Oneshot - Centrer formulaire Contact et supprimer panneau gauche
+
+**Actions réalisées** :
+- ✅ Suppression du panneau gauche avec image de fond et contenu support (28 lignes)
+- ✅ Suppression des imports inutiles (Mail, MessageSquare, Image from next/image)
+- ✅ Suppression du layout grid 2 colonnes (lg:grid-cols-2)
+- ✅ Centrage du formulaire avec container simplifié (flex items-center justify-center py-20)
+
+**Fichiers modifiés** :
+- `api-provider/app/[locale]/contact/page.tsx` - Suppression panneau gauche, formulaire centré
+
+**Commit** :
+- Hash : `c616a76`
+- Branche : `prod/ready_prod`
+- Message : "ux: center contact form and remove left panel"
+
+**Impact** :
+- Page Contact plus épurée et simple
+- Focus sur le formulaire
+- Moins de distractions visuelles
+
+---
+
+### main-agent - 2026-01-06 12:10
+**Tâche** : Oneshot - Déplacer section pricing vers route dédiée /pricing
+
+**Actions réalisées** :
+- ✅ Création de la route `app/[locale]/pricing/page.tsx` avec composant PricingSection
+- ✅ Retrait de `<PricingSection />` de la landing page (`app/[locale]/page.tsx`)
+- ✅ Retrait de l'import PricingSection de la landing page
+- ✅ Mise à jour du lien navbar de `/#pricing` vers `/pricing`
+- ✅ Build Next.js réussi (27 routes détectées dont /[locale]/pricing)
+
+**Fichiers créés** :
+- `api-provider/app/[locale]/pricing/page.tsx` - Page dédiée pricing
+
+**Fichiers modifiés** :
+- `api-provider/app/[locale]/page.tsx` - Retrait PricingSection
+- `api-provider/components/navbar.tsx` - Lien /#pricing → /pricing
+
+**Commit** :
+- Hash : `2639d35`
+- Branche : `prod/ready_prod`
+- Message : "enhance: move pricing section to dedicated /pricing route"
+
+**Impact** :
+- Landing page plus légère et focalisée (Hero + Features)
+- Pricing isolé sur une page dédiée
+- Navigation améliorée
+
+---
+
+### main-agent - 2026-01-06 11:50
+**Tâche** : Suppression de la route /services pour MVP minimal
+
+**Actions réalisées** :
+- ✅ Suppression du dossier `app/[locale]/services/` (page.tsx, services-client.tsx)
+- ✅ Retrait du lien "/services" dans la navbar (components/navbar.tsx)
+- ✅ Vérification : aucune autre référence à /services dans le code
+
+**Fichiers supprimés** :
+- `app/[locale]/services/page.tsx` - Page liste des services
+- `app/[locale]/services/services-client.tsx` - Composant client
+
+**Fichiers modifiés** :
+- `components/navbar.tsx` - Retrait du lien /services dans navLinks
+
+**Décisions prises** :
+- 🎯 Réduction du scope pour MVP : focus sur l'essentiel avant déploiement
+- 🎯 Fonctionnalités conservées : Keys, Usage, Pricing, Contact
+- 🎯 Fonctionnalité supprimée : Liste/exploration des services disponibles
+
+**Impact** :
+- Navigation simplifiée (4 liens au lieu de 5)
+- Moins de surface de code à maintenir pour le MVP
+- Focus sur le core flow : Achat → Clés → Utilisation → Suivi
+
+**Commit** :
+- Hash : `1989cfd`
+- Branche : `prod/ready_prod`
+- Message : "refactor(mvp): remove /services route for minimal MVP"
+
+---
+
 ### main-agent - 2026-01-06 11:40
 **Tâche** : Oneshot - Modifier le plan Developer pour qu'il soit payant à 2.99€
 
