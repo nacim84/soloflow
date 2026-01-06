@@ -11,12 +11,21 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { useServerSession } from "@/components/session-provider";
 
 export function PricingSection() {
+  const { user } = useServerSession();
   const [isLoading, setIsLoading] = useState(false);
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
 
   const handleBuyCredits = async (planType: 'developer' | 'startup' | 'scale') => {
+    // Vérifier si l'utilisateur est connecté
+    if (!user) {
+      // Rediriger vers login avec redirect vers pricing
+      window.location.href = "/login?redirect=/pricing";
+      return;
+    }
+
     setIsLoading(true);
     setLoadingPlan(planType);
 
