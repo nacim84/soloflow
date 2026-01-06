@@ -29,10 +29,10 @@ export function Navbar() {
   const isAuthenticated = !!user;
 
   const navLinks = [
-    { href: "/#pricing", label: t('pricing'), authRequired: false },
-    { href: "/contact", label: t('contact'), authRequired: false },
     { href: "/keys", label: t('myKeys'), authRequired: true },
     { href: "/usage", label: t('usage'), authRequired: true },
+    { href: "/pricing", label: t('pricing'), authRequired: false },
+    { href: "/contact", label: t('contact'), authRequired: false },
   ];
 
   const visibleLinks = navLinks.filter(
