@@ -3,6 +3,7 @@ import { sendEmail } from "@/lib/email";
 import { VerificationEmail } from "@/emails/verification";
 import { ResetPasswordEmail } from "@/emails/reset-password";
 import ContactNotificationEmail from "@/emails/contact-notification";
+import { WelcomeEmail } from "@/emails/welcome";
 import * as React from "react";
 
 // En dev, si QSTASH_TOKEN n'est pas défini, créer un client no-op
@@ -34,6 +35,12 @@ export type EmailJob =
       email: string;
       subject: 'bug' | 'feature' | 'improvement' | 'other';
       message: string;
+    }
+  | {
+      type: 'welcome';
+      to: string;
+      name: string;
+      dashboardUrl: string;
     };
 
 export async function queueEmail(job: EmailJob) {
@@ -66,6 +73,10 @@ export async function queueEmail(job: EmailJob) {
           message: job.message,
         }} />;
         replyTo = job.replyTo;
+        break;
+      case "welcome":
+        subject = "Welcome to SoloFlow! 🎉";
+        emailTemplate = <WelcomeEmail name={job.name} dashboardUrl={job.dashboardUrl} />;
         break;
     }
 

@@ -3,6 +3,7 @@ import { sendEmail } from "@/lib/email";
 import { VerificationEmail } from "@/emails/verification";
 import { ResetPasswordEmail } from "@/emails/reset-password";
 import ContactNotificationEmail from "@/emails/contact-notification";
+import { WelcomeEmail } from "@/emails/welcome";
 import type { EmailJob } from "@/lib/queue";
 
 export async function POST(req: NextRequest) {
@@ -46,6 +47,10 @@ export async function POST(req: NextRequest) {
           message: job.message,
         }} />;
         replyTo = job.replyTo;
+        break;
+      case "welcome":
+        subject = "Welcome to SoloFlow! 🎉";
+        emailTemplate = <WelcomeEmail name={job.name} dashboardUrl={job.dashboardUrl} />;
         break;
       default:
         return NextResponse.json(

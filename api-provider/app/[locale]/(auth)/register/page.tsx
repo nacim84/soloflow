@@ -83,6 +83,20 @@ function RegisterForm() {
           console.error("Erreur création organisation:", orgError);
         }
 
+        // Envoyer l'email de bienvenue
+        try {
+          const { queueEmail } = await import("@/lib/queue");
+          await queueEmail({
+            type: "welcome",
+            to: data.email,
+            name: data.name,
+            dashboardUrl: `${window.location.origin}/keys`,
+          });
+        } catch (emailError) {
+          console.error("Erreur envoi email de bienvenue:", emailError);
+          // Ne pas bloquer le flow si l'email échoue
+        }
+
         setSuccess(true);
         setIsLoading(null);
       }
