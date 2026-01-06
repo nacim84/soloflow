@@ -228,7 +228,7 @@ export function UsageClient({ user, orgId }: UsageClientProps) {
                     </p>
                     <Button
                       size="sm"
-                      onClick={() => router.push("/#pricing")}
+                      onClick={() => router.push("/pricing")}
                       className="bg-amber-600 hover:bg-amber-700 text-white border-none"
                     >
                       Recharger maintenant
