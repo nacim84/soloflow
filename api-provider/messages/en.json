@@ -6,7 +6,7 @@
   "navbar": {
     "appName": "Key API Manager",
     "pricing": "Pricing",
-    "myKeys": "My Keys",
+    "myKeys": "API Keys",
     "services": "Services",
     "usage": "Usage",
     "login": "Login",
